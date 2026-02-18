@@ -1,0 +1,52 @@
+{
+  "agents": [
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/agents/orchestrator_agent.yaml",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/agents/inventory_agent.yaml",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/agents/supplier_agent.yaml",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/agents/compliance_agent.yaml",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/agents/finance_agent.yaml"
+  ],
+  "broker": {
+    "SOLACE_BROKER_URL_VAR": "SOLACE_BROKER_URL",
+    "SOLACE_BROKER_USERNAME_VAR": "SOLACE_BROKER_USERNAME",
+    "SOLACE_BROKER_PASSWORD_VAR": "SOLACE_BROKER_PASSWORD",
+    "SOLACE_BROKER_VPN_VAR": "SOLACE_BROKER_VPN"
+  },
+  "llm_models": [
+    {
+      "name": "runtime-gpt41mini",
+      "env": {
+        "LLM_SERVICE_PLANNING_MODEL_NAME_VAR": "LLM_SERVICE_PLANNING_MODEL_NAME",
+        "LLM_SERVICE_ENDPOINT_VAR": "LLM_SERVICE_ENDPOINT",
+        "LLM_SERVICE_API_KEY_VAR": "LLM_SERVICE_API_KEY"
+      }
+    }
+  ],
+  "results_dir_name": "po-eval-trace-focus",
+  "runs": 3,
+  "workers": 3,
+  "test_cases": [
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc11_policy_override_guardrail.test.json",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc12_missing_facility_defaulting.test.json",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc13_urgent_tradeoff_explanation.test.json",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc14_stage_stop_transparency.test.json",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc15_timeout_budget_dual_failure.test.json",
+    "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc16_unapproved_vendor_override.test.json"
+  ],
+  "evaluation_settings": {
+    "tool_match": {
+      "enabled": true
+    },
+    "response_match": {
+      "enabled": true
+    },
+    "llm_evaluator": {
+      "enabled": true,
+      "env": {
+        "LLM_SERVICE_PLANNING_MODEL_NAME_VAR": "LLM_EVALUATOR_MODEL_NAME",
+        "LLM_SERVICE_ENDPOINT_VAR": "LLM_SERVICE_ENDPOINT",
+        "LLM_SERVICE_API_KEY_VAR": "LLM_SERVICE_API_KEY"
+      }
+    }
+  }
+}

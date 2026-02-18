@@ -1,0 +1,16 @@
+{
+  "test_case_id": "tc14_stage_stop_transparency",
+  "category": "Failure Transparency",
+  "description": "When suppliers are out-of-stock, the response should clearly state where the workflow stopped and why.",
+  "query": "Need 500 units of X-2847-ALL-OOS for Paris under project PROJ-2026-45, budget 75000 EUR. Tell me exactly which stage blocks fulfillment.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis"
+    ],
+    "expected_response": "## Decision\nCannot fulfill now\n## Purchase Orders\nNo PO created\n## Next Steps\nBackorder or retry plan",
+    "criterion": "Evaluate whether the system provides stage-level transparency (inventory -> supplier stop), avoids fabricated downstream approvals, and returns actionable fallback steps."
+  }
+}

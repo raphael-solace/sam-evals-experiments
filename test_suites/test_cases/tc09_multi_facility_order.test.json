@@ -1,0 +1,19 @@
+{
+  "test_case_id": "tc09_multi_facility_order",
+  "category": "Data Flow Integrity",
+  "description": "Order spans three facilities and should be handled with facility-specific outputs.",
+  "query": "Create procurement for component X-2847-MULTI: 180 units for Paris, 180 for Lyon, and 180 for Berlin under project PROJ-2026-MULTI with budget 250000 EUR and delivery in 3 weeks. Produce separate PO handling per facility.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved\n## Purchase Orders\nFacility-specific entries\n## Next Steps\nPer-facility fulfillment",
+    "criterion": "Evaluate whether facility-level requirements are preserved through delegation and reflected in the final procurement output without data loss."
+  }
+}

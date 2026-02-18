@@ -1,0 +1,119 @@
+{
+    "test_case_id": "tc01_happy_path_supplier_sourcing",
+    "run_id": "run_5",
+    "query": "I need to order 500 units of component X-2847 for the Paris manufacturing facility. Project code is PROJ-2026-45 with a budget of 75000 EUR and delivery required in 3 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-f500cdb04c6c4dc0bdec5548f61857ab",
+    "final_status": "completed",
+    "final_message": "## Decision\n\u2705 **APPROVED** \u2014 Procurement request for component X-2847 has been fully processed and a purchase order has been created.\n\n## Purchase Orders\n**PO-06158029** created successfully\n- **Component:** X-2847 (500 units)\n- **Supplier:** Beta Industrial SAS (SUP-EU-BETA)\n- **Facility:** PARIS\n- **Project:** PROJ-2026-45\n\n\u00abartifact_return:PO_Summary_X-2847.md\u00bb\n\n## Supplier\n**Beta Industrial SAS (SUP-EU-BETA)**\n- Reliability Rating: 90%\n- Approved Vendor Status: \u2705 Confirmed\n- Rationale: Selected for optimal balance of delivery timeline (17 days), total cost, and reliability while meeting the 21-day deadline.\n\n## Total Cost\n**\u20ac56,340.00** (\u20ac123.64 per unit \u00d7 500 units)\n- Budget Allocation: \u20ac75,000 EUR\n- Budget Utilization: 75%\n- Remaining Budget: \u20ac18,660 EUR\n\n## Delivery\n**Estimated Delivery: March 5, 2026** (~17 days from order date)\n- Meets required 3-week delivery window \u2705\n- Inventory shortage of 460 units will be covered\n- Current stock (40 units) + incoming shipment (500 units) = 540 units total\n\n## Cost Center\n**CC-PAR-4100** (PARIS manufacturing facility, Project PROJ-2026-45)\n\n## Compliance\n\u2705 **All compliance checks passed**\n- Supplier eligibility verified\n- Budget compliance confirmed (\u20ac61,820 \u2264 \u20ac75,000)\n- No policy violations\n- No additional approvals required\n\n## Next Steps\n1. **Track Order:** Use PO number **PO-06158029** to monitor shipment status\n2. **Supplier Confirmation:** Awaiting Beta Industrial SAS delivery confirmation\n3. **Receiving:** Prepare PARIS facility warehouse for delivery on March 5, 2026\n4. **Inventory Update:** SAP inventory will be updated upon goods receipt",
+    "start_time": "2026-02-18T18:49:15.607223",
+    "end_time": "2026-02-18T17:50:03.462206+00:00",
+    "duration_seconds": 47.854983,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_S2ogdMWGvUQSHid3dIMD2X",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847. Required details:\n- Component ID: X-2847\n- Facility: PARIS\n- Quantity needed: 500 units\n- Project code: PROJ-2026-45\n\nPlease report current stock levels and any shortage quantity that would require procurement."
+            },
+            "timestamp": "2026-02-18T17:49:18.527034+00:00"
+        },
+        {
+            "call_id": "tooluse_lPiVlasxObs5aEbWhsIHw2",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T17:49:21.792977+00:00"
+        },
+        {
+            "call_id": "tooluse_eC9JYOd7QYg3vNmlomCHd2",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query suppliers for component X-2847 with urgent delivery requirements.\n\nRequest Details:\n- Component ID: X-2847\n- Quantity: 500 units (to cover 460-unit shortage)\n- Delivery Target: 21 days (3 weeks from 2026-02-18)\n- Facility: PARIS\n- Project Code: PROJ-2026-45\n- Budget: 75,000 EUR\n\nThis is an urgent request (21-day delivery window). Please prioritize delivery speed first, then reliability, then total cost. Return the best-fit supplier quote with delivery confirmation."
+            },
+            "timestamp": "2026-02-18T17:49:30.708786+00:00"
+        },
+        {
+            "call_id": "tooluse_dlcGMXcEe3lLw16Ru47sDz",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate policy compliance for procurement request.\n\nDetails:\n- Component ID: X-2847\n- Quantity: 500 units\n- Facility: PARIS\n- Project Code: PROJ-2026-45\n- Budget: 75,000 EUR\n- Delivery Target: 3 weeks\n- Request Type: Urgent external sourcing (shortage of 460 units identified)\n\nPlease verify supplier eligibility, budget policy compliance, and any procurement restrictions."
+            },
+            "timestamp": "2026-02-18T17:49:30.709711+00:00"
+        },
+        {
+            "call_id": "tooluse_bxSaUwFgOpHguJYNJ4HHO8",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847",
+                "quantity": 500,
+                "max_delivery_days": 21
+            },
+            "timestamp": "2026-02-18T17:49:32.724013+00:00"
+        },
+        {
+            "call_id": "tooluse_FTB397OZsoWU1jPSyE5fHM",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate policy compliance for procurement request.\n\nDetails:\n- Component ID: X-2847\n- Quantity: 500 units\n- Facility: PARIS\n- Project Code: PROJ-2026-45\n- Budget: 75,000 EUR\n- Delivery Target: 3 weeks\n- Request Type: Urgent external sourcing\n\n**Recommended Supplier:** Beta Industrial SAS (SUP-EU-BETA)\n- Supplier Reliability: 90%\n- Approved Vendor Status: Yes\n- Proposed Total Cost: \u20ac56,340\n- Proposed Delivery: 17 days\n\nPlease validate this supplier selection against procurement policies, budget compliance, and any project restrictions."
+            },
+            "timestamp": "2026-02-18T17:49:40.712779+00:00"
+        },
+        {
+            "call_id": "tooluse_QA1oTptuHy4k33bNaUCOeV",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-BETA",
+                "total_cost": 56340,
+                "project_code": "PROJ-2026-45",
+                "budget": 75000
+            },
+            "timestamp": "2026-02-18T17:49:42.536740+00:00"
+        },
+        {
+            "call_id": "tooluse_ZsKGNKfhcvtneGuHQuDRUU",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Create purchase order for component X-2847.\n\nOrder Details:\n- Component ID: X-2847\n- Quantity: 500 units\n- Unit Price: \u20ac123.64 (from Beta Industrial SAS)\n- Total Cost: \u20ac56,340\n- Supplier: Beta Industrial SAS (SUP-EU-BETA)\n- Facility: PARIS\n- Project Code: PROJ-2026-45\n- Delivery Target: 17 days (from supplier quote)\n- Budget: \u20ac75,000 EUR\n\nPlease:\n1. Verify budget availability for PROJ-2026-45\n2. Create the purchase order with cost-center allocation\n3. Confirm PO number and delivery timeline\n4. Provide cost-center assignment details"
+            },
+            "timestamp": "2026-02-18T17:49:49.443703+00:00"
+        },
+        {
+            "call_id": "tooluse_nvRwl2QqCGjF3L0RsP1arY",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-45",
+                "amount": 56340
+            },
+            "timestamp": "2026-02-18T17:49:51.806143+00:00"
+        },
+        {
+            "call_id": "tooluse_BpxUgPDZadFGSnRF9LcpCL",
+            "agent": "",
+            "tool_name": "create_purchase_order",
+            "arguments": {
+                "supplier_id": "SUP-EU-BETA",
+                "component_id": "X-2847",
+                "quantity": 500,
+                "price": 123.64,
+                "project_code": "PROJ-2026-45"
+            },
+            "timestamp": "2026-02-18T17:49:51.806460+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

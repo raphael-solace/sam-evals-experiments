@@ -1,0 +1,18 @@
+{
+  "test_case_id": "tc15_timeout_budget_dual_failure",
+  "category": "Compound Failure",
+  "description": "One supplier timeout plus insufficient budget; system should continue reasoning and escalate cleanly.",
+  "query": "Order 500 units of X-2847-TIMEOUT for Paris under project PROJ-2026-OVER, budget 12000 EUR, delivery in 2 weeks.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability"
+    ],
+    "expected_response": "## Decision\nEscalation required\n## Purchase Orders\nNo PO created\n## Compliance\nBudget exceeded or approval required\n## Next Steps",
+    "criterion": "Evaluate whether timeout resilience and budget-failure handling both appear in end-to-end reasoning: proceed with remaining quotes, then block PO due to financial controls."
+  }
+}

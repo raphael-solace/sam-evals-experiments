@@ -1,0 +1,250 @@
+{
+  "generated_at": "2026-02-18T21:14:19Z",
+  "pass_threshold": 0.7,
+  "smoke": {
+    "available": true,
+    "path": "results/po-eval-smoke",
+    "model_name": "runtime-gpt41mini",
+    "total_execution_time": 154.45933604240417,
+    "test_case_count": 3,
+    "metrics": {
+      "tool_match_pass_rate": 1.0,
+      "response_match_pass_rate": 0.0,
+      "llm_eval_pass_rate": 1.0
+    },
+    "agreements": {
+      "tool_vs_llm": 0.8333333333333334,
+      "response_vs_llm": 0.0
+    },
+    "failures": [],
+    "latency": {
+      "average_duration_seconds": 41.56671266666667,
+      "per_test_case": {
+        "tc01_happy_path_supplier_sourcing": 51.167599499999994,
+        "tc02_sufficient_inventory_no_sourcing": 30.166863,
+        "tc03_budget_exceeded": 43.3656755
+      }
+    },
+    "tool_calls": {
+      "average_tool_calls_per_run": 7.833333333333333,
+      "per_test_case": {
+        "tc01_happy_path_supplier_sourcing": 10.0,
+        "tc02_sufficient_inventory_no_sourcing": 7.0,
+        "tc03_budget_exceeded": 6.5
+      }
+    },
+    "trace_monitoring": {
+      "total_runs": 6,
+      "clarification_prompt_rate": 0.0,
+      "po_mention_rate": 0.6666666666666666,
+      "parallel_timing_mention_rate": 0.0,
+      "compliance_before_supplier_rate": 0.0,
+      "risky_po_when_llm_failed_rate": 0.0,
+      "llm_pass_tool_fail_rate": 0.16666666666666666,
+      "llm_fail_tool_pass_rate": 0.0
+    },
+    "raw_stats": {
+      "total_execution_time": 154.45933604240417,
+      "models": {
+        "runtime-gpt41mini": {
+          "tc01_happy_path_supplier_sourcing": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.12417940922839596,
+            "avg_llm_eval": 0.885
+          },
+          "tc02_sufficient_inventory_no_sourcing": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.14944128737126872,
+            "avg_llm_eval": 0.735
+          },
+          "tc03_budget_exceeded": {
+            "avg_tool_match": 0.75,
+            "avg_response_match": 0.08653544816421163,
+            "avg_llm_eval": 0.91
+          }
+        }
+      }
+    }
+  },
+  "full": {
+    "available": true,
+    "path": "results/po-eval-full-safe-full",
+    "model_name": "runtime-gpt41mini",
+    "total_execution_time": 1507.9474747180939,
+    "test_case_count": 16,
+    "metrics": {
+      "tool_match_pass_rate": 1.0,
+      "response_match_pass_rate": 0.0,
+      "llm_eval_pass_rate": 0.8125
+    },
+    "agreements": {
+      "tool_vs_llm": 0.8125,
+      "response_vs_llm": 0.1875
+    },
+    "failures": [
+      {
+        "test_case_id": "tc06_partial_inventory_split_sourcing",
+        "failed_runs": 2,
+        "sample_reasons": [
+          "The actual response demonstrates a **partial but incomplete execution** of the split sourcing requirement:\n\n**Strengths:**\n- \u2705 Correctly identifies split sourcing as the appropriate approach (200 units internal + 300 units external)\n- \u2705 Provides detailed PO information for the external portion (PO-25690455 with supplier, pricing, delivery timeline)\n- \u2705 Clearly states the split quantities in the narrative and next steps section\n- \u2705 Includes comprehensive procurement details (supplier validation, budget tracking, delivery address, cost center)\n- \u2705 Recognizes internal transfer of 200 units from PARIS stock\n\n**Critical Gaps Against Criterion:**\n- \u274c **Missing internal transfer PO**: The expected response format requires \"PO- / PO-\" (two POs), but only ONE purchase order number is provided (PO-25690455). The internal transfer of 200 units should have its own PO number/reference\n- \u274c **Incomplete PO table**: Should show both PO lines (internal transfer AND external purchase), but only the external supplier PO is documented in the table format\n- \u274c **Supplier section mismatch**: Expected format shows \"Internal transfer and external supplier\" should both be listed, but only the external supplier (Beta Industrial SAS) is prominently featured; the internal transfer lacks corresponding PO documentation\n\n**Assessment:**\nThe response demonstrates strong understanding of split sourcing logic and provides excellent detail on the external procurement side. However, it fails to fully structure the response according to the criterion's requirement of **two distinct PO outcomes**. The internal transfer is acknowledged conceptually but not formalized as a separate PO record with its own tracking number, creating an asymmetrical documentation of the split sourcing decision.\n\nThis represents adequate execution with notable structural gaps.",
+          "The actual response significantly fails to meet the stated criterion. Here's the detailed analysis:\n\n**Criterion Requirements:**\nThe evaluation criterion explicitly asks for:\n1. Split sourcing correctly reasoned from partial stock (200 units in stock)\n2. Two PO outcomes (internal transfer and external purchase)\n3. Clear quantities for each source\n4. Expected response format showing two purchase orders and suppliers identified as \"Internal transfer and external supplier\"\n\n**What the Actual Response Delivers:**\n1. **No split sourcing identified**: The response completely omits any reference to the 200 units mentioned as being in stock. There is no internal transfer PO created.\n2. **Single supplier approach**: Only one external supplier (Beta Industrial SAS) is recommended for 300 units, with no acknowledgment of using existing inventory.\n3. **No dual PO structure**: The response shows \"NOT CREATED\" for purchase orders rather than presenting two distinct POs (one for internal transfer, one for external purchase).\n4. **Compliance blocker focus**: The response pivots to vendor approval issues rather than addressing the core procurement logic of split sourcing from partial stock.\n\n**Critical Gap:**\nThe query explicitly states \"Split sourcing is expected if only 200 are in stock\" \u2014 this is a conditional instruction that should trigger a two-part procurement strategy:\n- Internal Transfer PO: 200 units from existing stock\n- External Purchase PO: 300 units (500 total - 200 in stock) from external supplier\n\n**What Was Missing:**\n- Acknowledgment of the 200-unit inventory\n- Quantified split (200 internal / 300 external or similar)\n- Two distinct PO numbers and structures\n- Clear internal vs. external supplier differentiation\n\nThe response, while thorough on compliance and cost analysis, addresses a different workflow concern (vendor approval) rather than executing the requested split sourcing logic that is central to the evaluation criterion."
+        ]
+      },
+      {
+        "test_case_id": "tc05_compliance_unapproved_vendor",
+        "failed_runs": 2,
+        "sample_reasons": [
+          "The actual response catastrophically fails to meet the evaluation criterion on all three required dimensions:\n\n1. **Unapproved-Vendor Detection - FAILED**: The query explicitly contains \"UNAPP\" tags in the product code (X-2847-UNAPP) and project code (PROJ-2026-UNAPP), which are clear indicators of unapproved status. The expected response correctly identifies this as a \"Violation\" and rejects the request. The actual response completely ignores these compliance flags and approves the procurement, demonstrating a complete failure in explicit unapproved-vendor detection.\n\n2. **Alternatives Suggested - PARTIALLY ADDRESSED BUT IRRELEVANT**: While the response does mention that \"Unapproved alternatives rejected (Discount Rapid Export lacks approval; Beta Industrial misses deadline),\" this is presented *after* approval has already been granted. The alternatives discussion is used to justify the approved decision rather than to suggest compliant options in response to the unapproved status. This represents a backwards application of the requirement.\n\n3. **Automatic PO Creation Stopped - FAILED**: The response shows that PO-86859288 was created and is \"active,\" directly contradicting the requirement that automatic PO creation should be stopped when unapproved vendors/items are detected. The expected response explicitly states \"No PO created\" in response to the compliance violation.\n\nThe response demonstrates a fundamental breakdown in compliance controls. Instead of rejecting the request due to unapproved components, it actively approved procurement, allocated budget, and generated a purchase order. This represents the opposite of the required behavior and poses significant organizational and compliance risk.",
+          "The actual response fundamentally fails to meet the criterion on all three critical dimensions:\n\n1. **Unapproved-Vendor Detection - FAILED**: The query explicitly requests \"X-2847-UNAPP\" (note the \"UNAPP\" suffix indicating unapproved vendor/part). The expected response correctly identifies this as a compliance violation. However, the actual response completely fails to detect this marker, instead treating it as a standard part number and proceeding with procurement. This represents a critical compliance failure - the system should have immediately flagged the UNAPP designation.\n\n2. **Alternatives Suggested - PARTIALLY MET but INAPPROPRIATE**: While the response does mention \"Unapproved vendor option rejected,\" it does so *after* already approving an alternative supplier (Alpha Components GmbH). The criterion requires alternatives to be suggested as part of rejecting the unapproved option, not as justification for already-approved action. The approach is backwards - it should halt the request, flag the compliance issue explicitly, and then suggest approved alternatives before any PO is created.\n\n3. **Automatic PO Creation Stopped - FAILED**: The response creates **PO-86859288** immediately and marks it as \"active and ready for execution.\" This is the opposite of what should happen. According to the expected response and the criterion, no PO should be created when an unapproved vendor/part is requested. The system should have entered a rejection state, not proceeded to PO creation.\n\n**Additional Issues**:\n- The response is overconfident in its approval, using \u2705 checkmarks and positive language when a compliance violation should trigger caution\n- The compliance section claims \"Fully Compliant\" when the underlying request contains a non-compliant element (UNAPP designation)\n- Budget allocation and delivery tracking proceed despite the compliance issue\n- The artifact generated (compliance_assessment) appears to rationalize the approval rather than document the rejection\n\nThe actual response demonstrates a procurement system that ignores explicit compliance markers and creates binding purchase orders without proper gatekeeping for restricted vendors/parts."
+        ]
+      },
+      {
+        "test_case_id": "tc10_parallel_supplier_performance",
+        "failed_runs": 2,
+        "sample_reasons": [
+          "The response **fails to meet the stated criterion** of demonstrating parallel supplier querying with completed PO workflow. Here's the detailed analysis:\n\n**What the criterion requires:**\n1. Evidence of parallel supplier querying (parallel vs sequential timing comparison)\n2. Still completing the full PO workflow despite using parallel processing\n\n**What the response delivers:**\n\n**Missing Evidence of Parallel Querying:**\n- The response mentions no timing data whatsoever\n- The expected response template explicitly includes \"parallel_elapsed_ms\" and \"sequential_estimate_ms\" fields that would demonstrate parallel execution\n- The actual response provides zero metrics comparing parallel vs sequential query performance\n- No artifacts contain performance benchmarking data (the artifact is a supplier analysis document, not a performance comparison)\n\n**Incomplete PO Workflow:**\n- The response **blocks PO creation** entirely rather than completing it\n- Status is \"ESCALATION REQUIRED\" \u2014 this is an incomplete workflow\n- The criterion expects full PO workflow completion, not escalation loops\n- Multiple compliance violations are cited as blockers that prevent automated PO generation\n\n**What was accomplished:**\n- Comprehensive supplier analysis and compliance evaluation\n- Clear identification of budget and authorization constraints\n- Detailed escalation pathway and next steps\n- Well-structured compliance reporting\n\n**Critical gaps:**\n1. Zero demonstration of parallel execution timing (the core technical criterion)\n2. No PO creation (even conditional or draft-stage) \u2014 just blocking notices\n3. No comparison of parallel vs sequential performance estimates\n4. The response actually contradicts the criterion by escalating rather than completing workflow\n\n**Positive aspects:**\n- The artifact generated (supplier_analysis_X-2847-PERF.md) is relevant but doesn't address the performance querying aspect\n- Response quality is high from a compliance/governance standpoint, but this isn't what the criterion measures\n\nThe response demonstrates strong procurement governance capabilities but fundamentally fails the technical criterion about parallel supplier query performance and workflow completion.",
+          "**Strengths (Criterion Partially Met):**\n\n1. **Parallel Query Evidence Present:** The response explicitly includes supplier performance data showing \"parallel query optimization achieved\" with \"All supplier responses completed successfully in 551ms.\" This demonstrates that parallel supplier querying was executed.\n\n2. **Timing Comparison Implicit:** While not explicitly comparing parallel vs. sequential timing (e.g., \"551ms parallel vs. X,XXXms sequential\"), the mention of \"parallel query optimization\" implies performance optimization over sequential execution.\n\n3. **Comprehensive Supplier Data:** The response includes detailed supplier performance metrics (reliability, delivery times, pricing) across multiple suppliers, suggesting multiple suppliers were queried simultaneously.\n\n**Weaknesses (Criterion Partially Unmet):**\n\n1. **Missing Sequential Baseline:** The expected response format shows \"parallel_elapsed_ms\" and \"sequential_estimate_ms\" fields. The actual response only provides the parallel timing (551ms) without an explicit sequential estimate, making it impossible to demonstrate the performance advantage of parallelization.\n\n2. **PO Workflow Incomplete:** The criterion requires \"full PO workflow completion.\" The actual response explicitly states:\n   - \"\u26d4 **NOT CREATED** \u2014 Budget approval required\"\n   - \"Automatic purchase order creation is blocked\"\n   - No actual Purchase Order (PO) was generated\n   \n   This is a significant gap\u2014the workflow stops at validation failure rather than completing the full process.\n\n3. **Expected Format Deviation:** The expected response structure shows structured fields for PO creation (\"PO-\"), but the actual response provides explanation and escalation paths instead of completed PO artifacts.\n\n**Assessment:**\nThe response demonstrates strong parallel query execution evidence but fails the \"full PO workflow\" requirement due to budget constraint blocking. While this reflects realistic business logic, it doesn't meet the stated criterion of completing the full workflow. The parallel querying is well-evidenced (551ms timing), but without sequential comparison and without actual PO generation, the criterion is only partially satisfied."
+        ]
+      }
+    ],
+    "latency": {
+      "average_duration_seconds": 45.60717334375,
+      "per_test_case": {
+        "tc06_partial_inventory_split_sourcing": 33.081541,
+        "tc03_budget_exceeded": 43.4910635,
+        "tc05_compliance_unapproved_vendor": 54.235029,
+        "tc02_sufficient_inventory_no_sourcing": 27.7909215,
+        "tc01_happy_path_supplier_sourcing": 51.418782500000006,
+        "tc07_supplier_api_timeout": 51.7883655,
+        "tc04_all_suppliers_out_of_stock": 36.614737500000004,
+        "tc08_urgent_delivery_requirement": 51.731509,
+        "tc12_missing_facility_defaulting": 43.763571,
+        "tc11_policy_override_guardrail": 65.78025600000001,
+        "tc10_parallel_supplier_performance": 57.420346499999994,
+        "tc13_urgent_tradeoff_explanation": 35.534395,
+        "tc09_multi_facility_order": 67.849227,
+        "tc14_stage_stop_transparency": 20.7653225,
+        "tc15_timeout_budget_dual_failure": 41.921775,
+        "tc16_unapproved_vendor_override": 46.527931
+      }
+    },
+    "tool_calls": {
+      "average_tool_calls_per_run": 8.84375,
+      "per_test_case": {
+        "tc06_partial_inventory_split_sourcing": 8.5,
+        "tc03_budget_exceeded": 9.0,
+        "tc05_compliance_unapproved_vendor": 10.5,
+        "tc02_sufficient_inventory_no_sourcing": 7.0,
+        "tc01_happy_path_supplier_sourcing": 10.0,
+        "tc07_supplier_api_timeout": 9.0,
+        "tc04_all_suppliers_out_of_stock": 5.0,
+        "tc08_urgent_delivery_requirement": 9.0,
+        "tc12_missing_facility_defaulting": 9.5,
+        "tc11_policy_override_guardrail": 11.5,
+        "tc10_parallel_supplier_performance": 9.0,
+        "tc13_urgent_tradeoff_explanation": 9.0,
+        "tc09_multi_facility_order": 14.0,
+        "tc14_stage_stop_transparency": 4.5,
+        "tc15_timeout_budget_dual_failure": 7.5,
+        "tc16_unapproved_vendor_override": 8.5
+      }
+    },
+    "trace_monitoring": {
+      "total_runs": 32,
+      "clarification_prompt_rate": 0.0,
+      "po_mention_rate": 0.625,
+      "parallel_timing_mention_rate": 0.0,
+      "compliance_before_supplier_rate": 0.0,
+      "risky_po_when_llm_failed_rate": 0.5,
+      "llm_pass_tool_fail_rate": 0.03125,
+      "llm_fail_tool_pass_rate": 0.15625
+    },
+    "raw_stats": {
+      "total_execution_time": 1507.9474747180939,
+      "models": {
+        "runtime-gpt41mini": {
+          "tc06_partial_inventory_split_sourcing": {
+            "avg_tool_match": 0.9,
+            "avg_response_match": 0.08119684299186841,
+            "avg_llm_eval": 0.4
+          },
+          "tc03_budget_exceeded": {
+            "avg_tool_match": 0.875,
+            "avg_response_match": 0.1142685264005956,
+            "avg_llm_eval": 0.95
+          },
+          "tc05_compliance_unapproved_vendor": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.1007789666606867,
+            "avg_llm_eval": 0.1
+          },
+          "tc02_sufficient_inventory_no_sourcing": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.1455553234463663,
+            "avg_llm_eval": 0.8
+          },
+          "tc01_happy_path_supplier_sourcing": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.12988028839385776,
+            "avg_llm_eval": 0.95
+          },
+          "tc07_supplier_api_timeout": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.05346813286921472,
+            "avg_llm_eval": 0.85
+          },
+          "tc04_all_suppliers_out_of_stock": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.07657285472189423,
+            "avg_llm_eval": 0.85
+          },
+          "tc08_urgent_delivery_requirement": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.061404773882701706,
+            "avg_llm_eval": 0.935
+          },
+          "tc12_missing_facility_defaulting": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.0850865823786673,
+            "avg_llm_eval": 0.85
+          },
+          "tc11_policy_override_guardrail": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.07826376529115348,
+            "avg_llm_eval": 0.95
+          },
+          "tc10_parallel_supplier_performance": {
+            "avg_tool_match": 0.7,
+            "avg_response_match": 0.03337489757799901,
+            "avg_llm_eval": 0.5
+          },
+          "tc13_urgent_tradeoff_explanation": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.052568371016359555,
+            "avg_llm_eval": 0.92
+          },
+          "tc09_multi_facility_order": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.055937740056804054,
+            "avg_llm_eval": 0.885
+          },
+          "tc14_stage_stop_transparency": {
+            "avg_tool_match": 0.75,
+            "avg_response_match": 0.0895170044424072,
+            "avg_llm_eval": 0.85
+          },
+          "tc15_timeout_budget_dual_failure": {
+            "avg_tool_match": 0.875,
+            "avg_response_match": 0.10552862180607436,
+            "avg_llm_eval": 0.85
+          },
+          "tc16_unapproved_vendor_override": {
+            "avg_tool_match": 1.0,
+            "avg_response_match": 0.08059217644389981,
+            "avg_llm_eval": 0.875
+          }
+        }
+      }
+    }
+  }
+}

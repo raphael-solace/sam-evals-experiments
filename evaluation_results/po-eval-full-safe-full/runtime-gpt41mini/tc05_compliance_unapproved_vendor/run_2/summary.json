@@ -1,0 +1,110 @@
+{
+    "test_case_id": "tc05_compliance_unapproved_vendor",
+    "run_id": "run_2",
+    "query": "Need 500 units of X-2847-UNAPP for Paris facility, project PROJ-2026-UNAPP budget 82000 EUR, delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-7407bab84337440e873f3675f32e4280",
+    "final_status": "completed",
+    "final_message": "## Decision\n\u2705 **APPROVED** \u2013 Procurement workflow completed successfully. Full 500-unit requirement will be sourced externally from Alpha Components GmbH to meet urgent 2-week delivery deadline.\n\n## Purchase Orders\n**PO-86859288** created and active\n- Quantity: 500 units\n- Status: Created\n- Remaining budget after PO: \u20ac20,465\n\n## Supplier\n**Alpha Components GmbH (SUP-EU-ALPHA)**\n- Approved vendor with 0.94 reliability score\n- Selected for optimal balance of expedited delivery + compliance + cost efficiency\n- Unapproved alternatives rejected (Discount Rapid Export lacks approval; Beta Industrial misses deadline)\n\n## Total Cost\n**\u20ac61,535.00** (\u20ac123.07/unit \u00d7 500 units)\n- Budget: \u20ac82,000\n- Utilization: 75%\n\n## Delivery\n**13 days** (within 14-day requirement)\n- Estimated arrival: 2026-02-25\n- Provides 1-day schedule buffer\n\n## Cost Center\n**CC-PAR-4200** (Paris facility)\n\n## Compliance\n\u2705 All checks passed\n- Supplier approved\n- Budget authorized\n- Project code valid\n- No policy violations\n\n## Next Steps\n- PO-86859288 forwarded to supplier for confirmation\n- Monitor delivery progress against 2026-02-25 target\n- Expedited shipment scheduled to compress standard 20-day lead time",
+    "start_time": "2026-02-18T21:55:49.769998",
+    "end_time": "2026-02-18T20:56:31.276932+00:00",
+    "duration_seconds": 41.506934,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_TnlRIXw5l8SwsyRrYtoHSL",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-UNAPP at Paris facility (facility_code=\"PARIS\"). Required quantity: 500 units. Report current stock level and shortage quantity if any. This is for project PROJ-2026-UNAPP with a 2-week delivery target."
+            },
+            "timestamp": "2026-02-18T20:55:52.727210+00:00"
+        },
+        {
+            "call_id": "tooluse_dn5YOKP71Fzt9dEQKRssOR",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T20:55:55.528794+00:00"
+        },
+        {
+            "call_id": "tooluse_vY3FRPvVXxnRibeWI8A7nR",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query multiple suppliers for 500 units of component X-2847-UNAPP. This is an URGENT request with a 2-week (14-day) delivery target. Prioritize delivery speed first, then reliability, then cost. Project: PROJ-2026-UNAPP, Budget: 82000 EUR, Facility: PARIS. Standard lead time is 20 days, so we need suppliers capable of expedited delivery. Return best-fit quote recommendation with supplier name, unit price, total cost, delivery days, and any expediting options available."
+            },
+            "timestamp": "2026-02-18T20:56:04.026925+00:00"
+        },
+        {
+            "call_id": "tooluse_jAEbjXMH0kp1pHfdwCSBQz",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "quantity": 500,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T20:56:06.639086+00:00"
+        },
+        {
+            "call_id": "tooluse_vOmKP2NAPebJWksHBG7MNJ",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for purchase of 500 units of X-2847-UNAPP from Alpha Components GmbH (SUP-EU-ALPHA). Project: PROJ-2026-UNAPP, Budget: 82000 EUR, Facility: PARIS, Total cost: 61535 EUR, Delivery: 13 days. Verify: (1) supplier approval status and compliance policies, (2) budget authorization threshold compliance, (3) project coding approval, (4) any procurement policy restrictions. Report compliance status and any flagged issues."
+            },
+            "timestamp": "2026-02-18T20:56:16.630459+00:00"
+        },
+        {
+            "call_id": "tooluse_sD7TyYwnxFeXp0bIV8LYj7",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Check budget availability and create purchase order for: Component X-2847-UNAPP, Quantity 500 units, Supplier: Alpha Components GmbH (SUP-EU-ALPHA), Total Cost: 61535 EUR, Unit Price: 123.07 EUR, Project: PROJ-2026-UNAPP, Budget allocation: 82000 EUR, Facility: PARIS, Delivery target: 13 days. Allocate cost to project cost center and verify budget sufficiency. Proceed with PO creation if budget and compliance approved."
+            },
+            "timestamp": "2026-02-18T20:56:16.634310+00:00"
+        },
+        {
+            "call_id": "tooluse_hlELyDCeHgXCS6QGlonLL7",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "total_cost": 61535,
+                "project_code": "PROJ-2026-UNAPP",
+                "budget": 82000
+            },
+            "timestamp": "2026-02-18T20:56:19.737059+00:00"
+        },
+        {
+            "call_id": "tooluse_GnzrSrjwLw3R5x7XFwf7fW",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-UNAPP",
+                "amount": 61535
+            },
+            "timestamp": "2026-02-18T20:56:20.053476+00:00"
+        },
+        {
+            "call_id": "tooluse_ulCuJOBdxQmBWLTGxk7Y9A",
+            "agent": "",
+            "tool_name": "create_purchase_order",
+            "arguments": {
+                "project_code": "PROJ-2026-UNAPP",
+                "supplier_id": "SUP-EU-ALPHA",
+                "component_id": "X-2847-UNAPP",
+                "quantity": 500,
+                "price": 123.07
+            },
+            "timestamp": "2026-02-18T20:56:20.054139+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

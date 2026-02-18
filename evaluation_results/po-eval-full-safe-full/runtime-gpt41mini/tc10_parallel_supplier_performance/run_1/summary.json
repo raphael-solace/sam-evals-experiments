@@ -1,0 +1,87 @@
+{
+    "test_case_id": "tc10_parallel_supplier_performance",
+    "run_id": "run_1",
+    "query": "Need 1500 units of X-2847-PERF for Paris facility under project PROJ-2026-PERF budget 120000 EUR with delivery in 30 days. Include supplier query performance data.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-f1005450bb44451b8cfb43991b3528d3",
+    "final_status": "completed",
+    "final_message": "## Decision\n\n**Procurement request cannot proceed automatically due to budget constraint violation.**\n\nThe recommended supplier **SUP-P3** delivers optimal performance for the 30-day timeline (13-day delivery) but incurs a total cost of **\u20ac177,765**, exceeding the allocated budget of **\u20ac120,000 by \u20ac57,765 (48.1% overrun)**.\n\n## Purchase Orders\n\n**Status:** \u26d4 **NOT CREATED** \u2014 Budget approval required before PO issuance.\n\nCompliance validation failed due to budget threshold violation. Automatic purchase order creation is blocked pending budget modification.\n\n## Supplier\n\n| Rank | Supplier | Delivery Days | Reliability | Total Cost | Unit Price | Budget Status |\n|------|----------|---------------|-------------|-----------|-----------|---|\n| 1 \u2b50 | **SUP-P3** | **13** | **0.88** | **\u20ac177,765** | **\u20ac118.51** | \u274c Over budget |\n| 2 | SUP-P4 | 16 | 0.85 | \u20ac175,500 | \u20ac117.00 | \u274c Over budget |\n\n**Supplier Performance Data (SUP-P3):**\n- **Reliability Score:** 0.88 (industry-standard performance)\n- **Delivery Speed:** 13 days (17 days ahead of 30-day requirement)\n- **Query Performance:** All supplier responses completed successfully in 551ms (parallel query optimization achieved)\n\n## Total Cost\n\n| Item | Amount |\n|------|--------|\n| Base Cost (SUP-P3) | \u20ac177,765 |\n| Budget Allocation | \u20ac120,000 |\n| **Budget Overrun** | **\u20ac57,765** |\n\n## Delivery\n\n- **Target Deadline:** 30 days from order\n- **SUP-P3 Lead Time:** 13 days (exceeds timeline by 17 days)\n- **Timeline Status:** \u2705 Delivery feasible\n\n## Cost Center\n\n- **Project:** PROJ-2026-PERF\n- **Facility:** PARIS\n- **Component:** X-2847-PERF\n- **Quantity:** 1,500 units\n\n## Compliance\n\n**Validation Result:** \u274c **FAILED \u2014 Manual Approval Required**\n\n- **Supplier Eligibility:** \u2705 SUP-P3 approved vendor\n- **Budget Adherence:** \u274c Exceeds threshold by 48.1%\n- **Delivery Feasibility:** \u2705 Meets 30-day requirement\n- **Policy Status:** Request blocked from automatic processing\n\n## Next Steps\n\n**Escalation Required \u2014 Choose One:**\n\n1. **Budget Modification:** Request approval to increase budget from \u20ac120,000 to \u20ac177,765 (\u20ac57,765 increase)\n2. **Cost Negotiation:** Contact SUP-P3 to negotiate unit price reduction from \u20ac118.51/unit to \u20ac80/unit (\u20ac57,765 savings needed)\n3. **Quantity Reduction:** Reduce order to 1,010 units (remaining budget \u20ac176,990; feasible with SUP-P3 but impacts project scope)\n4. **Procurement Manager Escalation:** Route to management for budget override approval if justified by project urgency\n\n**Note:** All other evaluated suppliers exceed the budget constraint. Automatic PO creation cannot proceed until budget conflict is resolved through formal modification or escalation.",
+    "start_time": "2026-02-18T22:03:24.319481",
+    "end_time": "2026-02-18T21:04:10.704492+00:00",
+    "duration_seconds": 46.385011,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_0g3aRxa9nban0h53VfLoYk",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-PERF at Paris facility (PARIS). Required quantity: 1500 units. Project: PROJ-2026-PERF. Report current stock level and shortage quantity if applicable."
+            },
+            "timestamp": "2026-02-18T21:03:27.248224+00:00"
+        },
+        {
+            "call_id": "tooluse_NgjUlKenB8aJqDKW5SSrQw",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-PERF",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T21:03:29.947844+00:00"
+        },
+        {
+            "call_id": "tooluse_o93QDQcXO4fFqaEqIHebO4",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query suppliers for 1500 units of component X-2847-PERF for delivery to Paris facility (PARIS). Project: PROJ-2026-PERF. Budget: 120000 EUR. Delivery target: 30 days from order. Include supplier performance metrics (reliability, delivery speed, past performance data) in recommendations. Prioritize by delivery speed (30-day window is tight given 25-day existing lead time), then reliability, then cost."
+            },
+            "timestamp": "2026-02-18T21:03:38.767223+00:00"
+        },
+        {
+            "call_id": "tooluse_3DS2q5198pufCzjL7wYeR6",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement policy compliance for the following request: Component X-2847-PERF, Quantity: 1500 units, Facility: PARIS, Project: PROJ-2026-PERF, Budget: 120000 EUR, Delivery target: 30 days. Verify supplier eligibility requirements, budget policy thresholds, and any restricted material compliance. Report policy adherence status and any flagged constraints."
+            },
+            "timestamp": "2026-02-18T21:03:38.768236+00:00"
+        },
+        {
+            "call_id": "tooluse_IeJTuGvCF1ZKU41FlTJdbC",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-PERF",
+                "quantity": 1500,
+                "max_delivery_days": 30
+            },
+            "timestamp": "2026-02-18T21:03:42.057945+00:00"
+        },
+        {
+            "call_id": "tooluse_c6KPAHuQv1g8yEyrFUnhxr",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement policy compliance for the following request: Component X-2847-PERF, Quantity: 1500 units, Facility: PARIS, Project: PROJ-2026-PERF, Budget: 120000 EUR, Delivery target: 30 days, Selected Supplier: SUP-P3 (Perf Supplier 3). Verify supplier SUP-P3 eligibility, budget policy thresholds (total cost \u20ac177,765), and any restricted material compliance. Report policy adherence status and any flagged constraints."
+            },
+            "timestamp": "2026-02-18T21:03:53.942419+00:00"
+        },
+        {
+            "call_id": "tooluse_NABfxA1GK2DejPaQLzRcxy",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-P3",
+                "total_cost": 177765,
+                "project_code": "PROJ-2026-PERF",
+                "budget": 120000
+            },
+            "timestamp": "2026-02-18T21:03:57.094818+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

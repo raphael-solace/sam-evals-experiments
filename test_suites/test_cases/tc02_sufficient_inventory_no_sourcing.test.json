@@ -1,0 +1,18 @@
+{
+  "test_case_id": "tc02_sufficient_inventory_no_sourcing",
+  "category": "Conditional Flow",
+  "description": "Inventory is sufficient and supplier sourcing should be skipped.",
+  "query": "Order 500 units of component X-2847-INSTOCK for Paris facility under project PROJ-2026-45 budget 75000 EUR. If inventory is sufficient, skip supplier sourcing and proceed directly.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved\n## Purchase Orders\nPO-\n## Supplier\nInternal stock\n## Total Cost\n## Delivery\n## Cost Center\n## Compliance\n## Next Steps",
+    "criterion": "Evaluate whether the workflow skips external supplier querying when stock is enough, while still producing a compliant and budget-validated fulfillment decision."
+  }
+}

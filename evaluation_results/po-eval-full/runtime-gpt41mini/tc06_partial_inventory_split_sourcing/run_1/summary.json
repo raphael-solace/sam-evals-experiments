@@ -1,0 +1,96 @@
+{
+    "test_case_id": "tc06_partial_inventory_split_sourcing",
+    "run_id": "run_1",
+    "query": "Need 500 units of X-2847-PARTIAL for Paris facility under project PROJ-2026-PARTIAL budget 68000 EUR. Split sourcing is expected if only 200 are in stock.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-c2196153973547e69e1a6505af4fb64f",
+    "final_status": "working",
+    "final_message": "",
+    "start_time": "2026-02-18T19:07:22.278865",
+    "end_time": "2026-02-18T18:08:04.583907+00:00",
+    "duration_seconds": 42.305042,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_9ij29KcnrdTNjlnvE0vuRC",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-PARTIAL at Paris facility (facility_code=\"PARIS\"). Required quantity: 500 units. Report current stock level and shortage quantity if applicable."
+            },
+            "timestamp": "2026-02-18T18:07:27.018674+00:00"
+        },
+        {
+            "call_id": "tooluse_sVy1itIe2eq4bfRYqfLddZ",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-PARTIAL",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T18:07:30.515360+00:00"
+        },
+        {
+            "call_id": "tooluse_jGaOPlOkHbRXUC8ztHmsjr",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query suppliers for 300 units of X-2847-PARTIAL for Paris facility (PARIS). Project: PROJ-2026-PARTIAL. Budget: 68000 EUR. Standard procurement (not urgent). Prioritize: total cost, then reliability, then delivery. Return best-fit quote recommendation."
+            },
+            "timestamp": "2026-02-18T18:07:36.645015+00:00"
+        },
+        {
+            "call_id": "tooluse_pd7vtusJjrCPVxes7HQdDw",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for X-2847-PARTIAL: 500 units total (200 from Paris stock + 300 external sourcing). Project PROJ-2026-PARTIAL, budget 68000 EUR, Paris facility. Verify supplier policy and budget allocation compliance rules."
+            },
+            "timestamp": "2026-02-18T18:07:36.651294+00:00"
+        },
+        {
+            "call_id": "tooluse_kmZMiZyyJMBurKxHtCeuQx",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-PARTIAL",
+                "quantity": 300,
+                "max_delivery_days": 30
+            },
+            "timestamp": "2026-02-18T18:07:40.654470+00:00"
+        },
+        {
+            "call_id": "tooluse_ZHHylWTA6I4gTUr9nnQWki",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for X-2847-PARTIAL: split sourcing (200 units from internal Paris stock + 300 units external). Recommended supplier: SUP-EU-BETA (Beta Industrial SAS), cost \u20ac33,612 for 300 units. Project PROJ-2026-PARTIAL, total budget 68,000 EUR, Paris facility. Verify supplier policy compliance and budget allocation rules for this sourcing plan."
+            },
+            "timestamp": "2026-02-18T18:07:50.422295+00:00"
+        },
+        {
+            "call_id": "tooluse_xu2Rgzbcnxd95LIZWiDCQI",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-BETA",
+                "total_cost": 33612,
+                "project_code": "PROJ-2026-PARTIAL",
+                "budget": 68000
+            },
+            "timestamp": "2026-02-18T18:07:52.541428+00:00"
+        },
+        {
+            "call_id": "tooluse_N9dvxwmdPmSN6plZb69L64",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Create Purchase Order for X-2847-PARTIAL: External sourcing of 300 units from SUP-EU-BETA (Beta Industrial SAS) at \u20ac112.04 per unit (total \u20ac33,612). Allocate to project PROJ-2026-PARTIAL, Paris facility. Cost center allocation based on project. Include internal stock allocation (200 units already in Paris inventory). Generate PO with full cost breakdown."
+            },
+            "timestamp": "2026-02-18T18:07:59.416537+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

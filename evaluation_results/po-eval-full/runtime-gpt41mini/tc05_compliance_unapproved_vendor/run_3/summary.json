@@ -1,0 +1,57 @@
+{
+    "test_case_id": "tc05_compliance_unapproved_vendor",
+    "run_id": "run_3",
+    "query": "Need 500 units of X-2847-UNAPP for Paris facility, project PROJ-2026-UNAPP budget 82000 EUR, delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-ec0f9cb5417743ef8a98683a6e1416d0",
+    "final_status": "working",
+    "final_message": "",
+    "start_time": "2026-02-18T19:07:22.219716",
+    "end_time": "2026-02-18T18:08:06.354609+00:00",
+    "duration_seconds": 44.134893,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_VZX6kDbyYJi2JQaGVENh6k",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory status for component X-2847-UNAPP at PARIS facility. Report current stock level and any shortage quantity needed. Request details: 500 units required, project PROJ-2026-UNAPP, facility PARIS, budget 82000 EUR, delivery target 2 weeks (14 days)."
+            },
+            "timestamp": "2026-02-18T18:07:47.787455+00:00"
+        },
+        {
+            "call_id": "tooluse_GSqpa5ml5gUnNhturZTjpP",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T18:07:49.956442+00:00"
+        },
+        {
+            "call_id": "tooluse_CwhxlfhkdjvQ6ghiw5Nqw3",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "URGENT procurement request - expedited delivery required. Component: X-2847-UNAPP, Quantity: 500 units, Facility: PARIS, Project: PROJ-2026-UNAPP, Budget: 82000 EUR, Delivery deadline: 2 weeks (14 days). CRITICAL: Standard lead time is 20 days - must prioritize suppliers capable of expedited delivery within 14 days. Rank suppliers by delivery speed first, then reliability, then cost. Request quotes from all available suppliers for this urgent need."
+            },
+            "timestamp": "2026-02-18T18:07:57.326612+00:00"
+        },
+        {
+            "call_id": "tooluse_wT1BXRU7qMciQj1TBVPY6c",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "quantity": 500,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T18:07:59.513277+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

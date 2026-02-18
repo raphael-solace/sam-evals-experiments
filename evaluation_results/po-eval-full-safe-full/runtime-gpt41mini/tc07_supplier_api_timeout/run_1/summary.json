@@ -1,0 +1,110 @@
+{
+    "test_case_id": "tc07_supplier_api_timeout",
+    "run_id": "run_1",
+    "query": "Order 500 units of X-2847-TIMEOUT for Paris facility under project PROJ-2026-TIMEOUT budget 70000 EUR with delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-da03bb12567e4b0eb082f4af90fa45e2",
+    "final_status": "completed",
+    "final_message": "## Decision\n\u2705 **Approved** \u2013 Procurement request for 500 units of X-2847-TIMEOUT is authorized. All compliance, budget, and delivery requirements are satisfied.\n\n## Purchase Orders\n- **PO Number:** PO-08530933\n- **Status:** Created and ready for processing\n- **Supplier:** Alpha Components GmbH (SUP-EU-ALPHA)\n- **Component:** X-2847-TIMEOUT\n- **Quantity:** 500 units\n\n## Supplier\n**Alpha Components GmbH (SUP-EU-ALPHA)**\n- **Reliability Score:** 0.94 (excellent)\n- **Selection Rationale:** Only viable supplier meeting the critical 14-day delivery deadline; misses SAP lead time of 18 days\n\n## Total Cost\n- **PO Amount:** \u20ac61,130.00 (\u20ac122.26 per unit)\n- **Budget Allocation:** \u20ac70,000\n- **Remaining Budget:** \u20ac8,870\n\n## Delivery\n- **Estimated Delivery:** 2026-02-25 (13 days)\n- **Facility:** Paris (PARIS / PAR-WH-04)\n- **Status:** \u2705 Meets 2-week (14-day) deadline with 1-day buffer\n\n## Cost Center\n- **Cost Center:** CC-PAR-4400 (Paris facility)\n- **Project:** PROJ-2026-TIMEOUT\n\n## Compliance\n- **Status:** \u2705 Approved\n- **Supplier Approval:** Validated\n- **Budget Compliance:** 87.3% of budget utilized\n- **Note:** Standard authorization signature required per governance procedures\n\n## Next Steps\n1. **Route PO for Authorization** \u2013 PO-08530933 requires authorized procurement officer sign-off\n2. **Confirm Delivery Address** \u2013 Verify Paris facility receiving details with SUP-EU-ALPHA\n3. **Track Order** \u2013 Monitor delivery via supplier tracking to ensure 13-day timeline is met\n4. **Inventory Receipt** \u2013 Prepare receiving procedures for 500-unit intake at PARIS warehouse",
+    "start_time": "2026-02-18T21:57:39.145382",
+    "end_time": "2026-02-18T20:58:24.150460+00:00",
+    "duration_seconds": 45.005078,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_yNaz7kZLD8NEQ8RUsqAkqe",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-TIMEOUT at Paris facility (PARIS). We need 500 units for project PROJ-2026-TIMEOUT with a 70,000 EUR budget and 2-week delivery target. Please report current stock level and any shortage quantity."
+            },
+            "timestamp": "2026-02-18T20:57:42.207818+00:00"
+        },
+        {
+            "call_id": "tooluse_vkHcr4E8G4DkFc0656PHXT",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-TIMEOUT",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T20:57:44.282121+00:00"
+        },
+        {
+            "call_id": "tooluse_PXkkokGtoPATMRPxqTU5Ru",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query multiple suppliers for 500 units of component X-2847-TIMEOUT for Paris facility (PARIS). Project: PROJ-2026-TIMEOUT. Budget: 70,000 EUR. Delivery target: 2 weeks (14 days). This is an urgent request due to tight delivery deadline (14 days vs. SAP lead time of 18 days). Prioritize delivery speed first, then reliability, then cost. Provide best-fit quote recommendation."
+            },
+            "timestamp": "2026-02-18T20:57:50.987625+00:00"
+        },
+        {
+            "call_id": "tooluse_hVUVoIgFgc3NUg8RtktHlB",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-TIMEOUT",
+                "quantity": 500,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T20:57:53.806322+00:00"
+        },
+        {
+            "call_id": "tooluse_uUNc7PBzfgrBiwU7IAUhZv",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate supplier and budget policy compliance for procurement request: Component X-2847-TIMEOUT, 500 units for Paris facility (PARIS), project PROJ-2026-TIMEOUT, budget 70,000 EUR, 2-week delivery target. Recommended supplier: Alpha Components GmbH (SUP-EU-ALPHA), total cost \u20ac61,130. Please verify supplier approval status, budget authorization policies, and any required compliance documentation."
+            },
+            "timestamp": "2026-02-18T20:58:06.934386+00:00"
+        },
+        {
+            "call_id": "tooluse_jvO3WFspV4hM4LAk0pDAMY",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Check budget availability and create purchase order for: Component X-2847-TIMEOUT, 500 units, Paris facility (PARIS), project PROJ-2026-TIMEOUT, budget allocation 70,000 EUR. Recommended supplier: Alpha Components GmbH (SUP-EU-ALPHA), total cost \u20ac61,130 (unit price \u20ac122.26). Delivery target: 14 days. Please verify budget sufficiency, allocate cost center, and prepare PO for creation."
+            },
+            "timestamp": "2026-02-18T20:58:06.935346+00:00"
+        },
+        {
+            "call_id": "tooluse_RMmZdBiOLDAa6adtj4kUvV",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "total_cost": 61130,
+                "project_code": "PROJ-2026-TIMEOUT",
+                "budget": 70000
+            },
+            "timestamp": "2026-02-18T20:58:10.299618+00:00"
+        },
+        {
+            "call_id": "tooluse_sMk7BA7BqdoLUIbrPWyEa8",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-TIMEOUT",
+                "amount": 61130
+            },
+            "timestamp": "2026-02-18T20:58:11.075152+00:00"
+        },
+        {
+            "call_id": "tooluse_kdca7bmJMwBVlHBfWa4HuS",
+            "agent": "",
+            "tool_name": "create_purchase_order",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "component_id": "X-2847-TIMEOUT",
+                "quantity": 500,
+                "price": 122.26,
+                "project_code": "PROJ-2026-TIMEOUT"
+            },
+            "timestamp": "2026-02-18T20:58:15.118060+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

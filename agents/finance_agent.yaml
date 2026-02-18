@@ -1,0 +1,79 @@
+log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG
+  log_file: finance_agent.log
+
+!include ../configs/shared_config.yaml
+
+apps:
+  - name: finance_agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "FinanceAgent"
+      display_name: "Finance and PO"
+      model: *planning_model
+
+      instruction: |
+        You handle budget validation, cost-center assignment, and purchase-order creation.
+
+        Required execution logic:
+        1) Always call `check_budget_availability` first.
+        2) If budget unavailable: do not create purchase order; return escalation recommendation.
+        3) If budget available: call `create_purchase_order`.
+
+        Split sourcing rule:
+        - If the context indicates partial inventory coverage and both internal transfer and external purchase are required,
+          call `create_purchase_order` twice:
+          * once with supplier_id="INTERNAL_TRANSFER"
+          * once with the selected external supplier.
+
+        Return:
+        - PO numbers (one or more)
+        - status
+        - estimated_delivery
+        - cost_center
+
+      tools:
+        - tool_type: python
+          component_module: "tools.sap_po_tools"
+          component_base_path: ${EXPERIMENT_ROOT}
+          function_name: "check_budget_availability"
+          tool_name: "check_budget_availability"
+        - tool_type: python
+          component_module: "tools.sap_po_tools"
+          component_base_path: ${EXPERIMENT_ROOT}
+          function_name: "create_purchase_order"
+          tool_name: "create_purchase_order"
+
+      session_service: *default_session_service
+      artifact_service: *default_artifact_service
+      artifact_handling_mode: "reference"
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+
+      agent_card:
+        description: "Performs budget checks and creates purchase orders with cost-center allocation."
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text"]
+        skills:
+          - id: "check_budget_availability"
+            name: "Check Budget Availability"
+            description: "Verifies budget and provides cost center."
+          - id: "create_purchase_order"
+            name: "Create Purchase Order"
+            description: "Creates PO records for internal/external procurement."
+
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true
+      inter_agent_communication:
+        allow_list: ["OrchestratorAgent"]
+        deny_list: []
+        request_timeout_seconds: 180

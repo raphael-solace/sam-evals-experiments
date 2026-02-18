@@ -1,0 +1,67 @@
+log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG
+  log_file: compliance_agent.log
+
+!include ../configs/shared_config.yaml
+
+apps:
+  - name: compliance_agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "ComplianceAgent"
+      display_name: "Procurement Compliance"
+      model: *planning_model
+
+      instruction: |
+        You validate procurement policy and budget compliance.
+        Always call `validate_compliance_rules` exactly once.
+        Never ask follow-up questions; use deterministic fallbacks and proceed.
+        Fallbacks:
+        - If supplier is missing for internal inventory flows, use supplier_id="INTERNAL_TRANSFER".
+        - If total_cost is missing but budget is present, use total_cost=budget as a conservative bound.
+
+        Return a clear compliance decision with:
+        - approved
+        - approval_required
+        - violations
+        - supplier_id
+
+        If violations exist, state whether automatic PO creation must stop.
+
+      tools:
+        - tool_type: python
+          component_module: "tools.sap_po_tools"
+          component_base_path: ${EXPERIMENT_ROOT}
+          function_name: "validate_compliance_rules"
+          tool_name: "validate_compliance_rules"
+
+      session_service: *default_session_service
+      artifact_service: *default_artifact_service
+      artifact_handling_mode: "reference"
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+
+      agent_card:
+        description: "Validates supplier and budget policy compliance for procurement requests."
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text"]
+        skills:
+          - id: "validate_compliance_rules"
+            name: "Validate Compliance Rules"
+            description: "Evaluates approved-vendor and budget policy constraints."
+
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true
+      inter_agent_communication:
+        allow_list: ["OrchestratorAgent"]
+        deny_list: []
+        request_timeout_seconds: 120

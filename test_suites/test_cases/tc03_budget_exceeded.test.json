@@ -1,0 +1,18 @@
+{
+  "test_case_id": "tc03_budget_exceeded",
+  "category": "Policy Enforcement",
+  "description": "Sourcing works but budget is exceeded, so no automatic PO should be created.",
+  "query": "Order 500 units of component X-2847 for Paris facility under project PROJ-2026-OVER with budget 12000 EUR and delivery in 2 weeks.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability"
+    ],
+    "expected_response": "## Decision\nEscalation required\n## Purchase Orders\nNo PO created\n## Supplier\n## Total Cost\n## Delivery\n## Cost Center\n## Compliance\nBudget exceeded\n## Next Steps",
+    "criterion": "Evaluate whether the system correctly blocks PO creation when budget is not available and provides escalation guidance instead of an approved PO."
+  }
+}

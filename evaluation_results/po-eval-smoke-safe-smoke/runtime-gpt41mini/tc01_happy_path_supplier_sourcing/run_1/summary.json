@@ -1,0 +1,119 @@
+{
+    "test_case_id": "tc01_happy_path_supplier_sourcing",
+    "run_id": "run_1",
+    "query": "I need to order 500 units of component X-2847 for the Paris manufacturing facility. Project code is PROJ-2026-45 with a budget of 75000 EUR and delivery required in 3 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-69565c44-9850-47f7-ae7f-2f9a7f11d96b",
+    "context_id": "rest-session-94ab6e7993694e09bce0f58558a6cdc1",
+    "final_status": "completed",
+    "final_message": "## Decision\n\u2705 **Procurement approved and PO created.** All validation stages passed: inventory shortage identified, optimal supplier selected based on urgent delivery requirements, compliance verified, and budget confirmed available.\n\n## Purchase Orders\n**PO-74190162** created for 460 units of component X-2847\n- Status: Active\n- Created: 2026-02-18 20:45:13 UTC\n\n## Supplier\n**Alpha Components GmbH** (SUP-EU-ALPHA)\n- Delivery: 12 days (arrives 2026-02-25)\n- Reliability score: 0.94 (highest among fast options)\n- Meets urgent 21-day delivery deadline with 9-day buffer\n\n## Total Cost\n**\u20ac54,123.60** for 460 units @ \u20ac117.66/unit\n- Budget remaining: \u20ac20,876.40 of \u20ac75,000 (72.17% utilized)\n\n## Delivery\n**Estimated delivery: 2026-02-25** (7 days ahead of 21-day requirement)\n- Warehouse: PAR-WH-01 (Paris facility)\n- Combined with existing 40 units in stock = 500 units total\n\n## Cost Center\n**CC-PAR-4100** (Paris facility cost center)\n\n## Compliance\n\u2705 **Approved** \u2013 No violations identified\n- Supplier eligible (SUP-EU-ALPHA approved vendor)\n- Budget compliant (\u20ac54,123.60 \u2264 \u20ac75,000)\n- Delivery obligations met\n\n## Next Steps\n1. \u2705 PO issued to Alpha Components GmbH\n2. Monitor delivery for 2026-02-25 arrival\n3. Confirm 500-unit receipt at Paris facility (40 existing + 460 ordered)\n4. Close project PROJ-2026-45 upon completion",
+    "start_time": "2026-02-18T21:44:36.674909",
+    "end_time": "2026-02-18T20:45:22.745669+00:00",
+    "duration_seconds": 46.07076,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_UFgb0fejB0uGvqxB73oxhz",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847. Report current stock level and shortage quantity if any. Context: 500 units needed for Paris manufacturing facility (facility_code: PARIS), project code PROJ-2026-45, budget 75000 EUR, delivery required in 3 weeks."
+            },
+            "timestamp": "2026-02-18T20:44:39.967150+00:00"
+        },
+        {
+            "call_id": "tooluse_CqIHMKh2H3h9tzqYhe9VeR",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T20:44:42.144030+00:00"
+        },
+        {
+            "call_id": "tooluse_kruPojhelogSVZdF1PKKwv",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Find best supplier quote for component X-2847. Quantity needed: 460 units (urgent - delivery required in 3 weeks / 21 days). Project: PROJ-2026-45, Budget: 75000 EUR, Facility: PARIS. Prioritize delivery speed first (must arrive within 21 days), then reliability, then cost. Return recommended supplier with quote, delivery timeline, and total cost."
+            },
+            "timestamp": "2026-02-18T20:44:51.579945+00:00"
+        },
+        {
+            "call_id": "tooluse_MRPVJfBLdwFMMSDiUPM4iz",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for component X-2847 purchase. Context: Component ID X-2847, Quantity 460 units, Facility PARIS, Project PROJ-2026-45, Budget 75000 EUR, Delivery target 21 days (urgent procurement). Check supplier policies, budget compliance rules, and delivery obligation requirements. Confirm compliance status and flag any issues."
+            },
+            "timestamp": "2026-02-18T20:44:51.582956+00:00"
+        },
+        {
+            "call_id": "tooluse_WrIm5q2FJATNhVf6Trdoet",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847",
+                "quantity": 460,
+                "max_delivery_days": 21
+            },
+            "timestamp": "2026-02-18T20:44:56.070311+00:00"
+        },
+        {
+            "call_id": "tooluse_FYRmnNpGMLzA5emEeemevx",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for component X-2847 purchase. Context: Component ID X-2847, Quantity 460 units, Facility PARIS, Project PROJ-2026-45, Budget 75000 EUR, Delivery target 21 days. Recommended Supplier: SUP-EU-ALPHA (Alpha Components GmbH) with total cost \u20ac54,123.60. Check supplier eligibility, budget compliance (\u20ac54,123.60 vs \u20ac75,000), delivery obligation requirements, and any policy violations."
+            },
+            "timestamp": "2026-02-18T20:45:05.868161+00:00"
+        },
+        {
+            "call_id": "tooluse_JsfY2waaWIP7N4cS7OA2mS",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Process budget check and create purchase order for component X-2847. Context: Component ID X-2847, Quantity 460 units, Unit Price \u20ac117.66, Total Cost \u20ac54,123.60, Supplier SUP-EU-ALPHA (Alpha Components GmbH), Facility PARIS, Project PROJ-2026-45, Budget 75000 EUR, Delivery required in 3 weeks (12 days from order per supplier). Check budget availability against 75000 EUR, allocate to cost center, and create PO with delivery terms."
+            },
+            "timestamp": "2026-02-18T20:45:05.869012+00:00"
+        },
+        {
+            "call_id": "tooluse_K9YuujJ9VwUudDpAhDRj1m",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "total_cost": 54123.6,
+                "project_code": "PROJ-2026-45",
+                "budget": 75000
+            },
+            "timestamp": "2026-02-18T20:45:07.988965+00:00"
+        },
+        {
+            "call_id": "tooluse_mVgObreoLT9NfCtEZVIsbO",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-45",
+                "amount": 54123.6
+            },
+            "timestamp": "2026-02-18T20:45:09.845350+00:00"
+        },
+        {
+            "call_id": "tooluse_B8eurpPGZSu7q2b8kCwMzZ",
+            "agent": "",
+            "tool_name": "create_purchase_order",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "component_id": "X-2847",
+                "quantity": 460,
+                "price": 117.66,
+                "project_code": "PROJ-2026-45"
+            },
+            "timestamp": "2026-02-18T20:45:13.230373+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

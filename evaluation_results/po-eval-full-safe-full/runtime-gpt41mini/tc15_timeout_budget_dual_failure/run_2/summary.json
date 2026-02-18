@@ -1,0 +1,78 @@
+{
+    "test_case_id": "tc15_timeout_budget_dual_failure",
+    "run_id": "run_2",
+    "query": "Order 500 units of X-2847-TIMEOUT for Paris under project PROJ-2026-OVER, budget 12000 EUR, delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-06f27b9d7958437caf5b0670be3091fe",
+    "final_status": "completed",
+    "final_message": "## Decision\n**BLOCKED** \u2014 Procurement request cannot proceed without budget exception approval.\n\nThe required component X-2847-TIMEOUT (500 units) is unavailable in inventory and must be sourced externally. A suitable supplier meeting the 2-week delivery deadline has been identified, but the total cost of **\u20ac61,130** significantly exceeds the allocated budget of **\u20ac12,000** (\u20ac49,130 overage).\n\n## Purchase Orders\n**No PO created.** Purchase order generation is halted pending budget override approval. The compliance review identified a 410% budget overrun that violates procurement policy.\n\n## Supplier\n**Alpha Components GmbH (SUP-EU-ALPHA)**\n- Unit Price: \u20ac122.26\n- Delivery: 13 days \u2705 (meets 2-week deadline)\n- Reliability: 94%\n- Status: Approved supplier, but quote exceeds budget constraints\n\n## Total Cost\n**\u20ac61,130** (\u20ac49,130 over budget)\n\n## Delivery\n**13 days** to PARIS facility \u2014 meets 2-week requirement with 1-day buffer.\n\n## Cost Center\nPending budget approval \u2014 cost center allocation cannot be finalized until exception is authorized.\n\n## Compliance\n\u274c **FAILED** \u2014 Budget policy violation. Formal escalation and written approval required before proceeding.\n\n## Next Steps\n\n1. **Immediate Escalation Required:** Submit budget override request to:\n   - Project PROJ-2026-OVER budget holder\n   - Procurement director\n   - Finance/executive sponsor (if applicable per organizational thresholds)\n\n2. **Alternative Options to Explore:**\n   - Reduce order quantity to ~98 units to stay within \u20ac12,000 budget\n   - Request additional budget allocation\n   - Extend delivery timeline to access lower-cost suppliers\n   - Negotiate volume discounts with Alpha Components GmbH\n\n3. **Upon Approval:** Once written budget exception approval is obtained, provide authorization reference and PO generation will proceed immediately.",
+    "start_time": "2026-02-18T22:11:43.422755",
+    "end_time": "2026-02-18T21:12:22.251966+00:00",
+    "duration_seconds": 38.829211,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_JbI14HAuDViUImei1j1V6L",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory status for component X-2847-TIMEOUT. Report current stock level and calculate shortage quantity for a requirement of 500 units. Provide inventory availability report for procurement decision."
+            },
+            "timestamp": "2026-02-18T21:11:45.656118+00:00"
+        },
+        {
+            "call_id": "tooluse_gpU2VsytfatIPwkNBwsoMb",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-TIMEOUT",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T21:11:48.162534+00:00"
+        },
+        {
+            "call_id": "tooluse_G4m7OM567id5IG6LqsCxMY",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Find best supplier quotes for component X-2847-TIMEOUT. Requirements: 500 units, delivery to PARIS facility, delivery target 2 weeks (14 days), project PROJ-2026-OVER, budget 12000 EUR. This is an urgent request with tight delivery constraints. Prioritize delivery speed first, then reliability, then cost. Query multiple suppliers and recommend best-fit quote with delivery timeline and total cost."
+            },
+            "timestamp": "2026-02-18T21:11:53.647700+00:00"
+        },
+        {
+            "call_id": "tooluse_dB5cQQ96awJ6Uq49F1a61H",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-TIMEOUT",
+                "quantity": 500,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T21:11:56.438250+00:00"
+        },
+        {
+            "call_id": "tooluse_wxPLEyGALG6r424nspij9o",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate supplier and budget policy compliance for procurement request. Details: Component X-2847-TIMEOUT, 500 units, supplier SUP-EU-ALPHA (Alpha Components GmbH), total cost \u20ac61,130, delivery to PARIS facility, project PROJ-2026-OVER, budget allocation 12,000 EUR. The quote significantly exceeds the allocated budget (\u20ac49,130 overage). Check: (1) supplier approval status, (2) budget policy constraints, (3) cost-center policy, (4) approval thresholds for exceeding budgets. Provide compliance assessment and required escalation actions."
+            },
+            "timestamp": "2026-02-18T21:12:06.516990+00:00"
+        },
+        {
+            "call_id": "tooluse_tOIGfFQwY6hCdbyuhOCUjK",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "total_cost": 61130,
+                "project_code": "PROJ-2026-OVER",
+                "budget": 12000
+            },
+            "timestamp": "2026-02-18T21:12:09.760069+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

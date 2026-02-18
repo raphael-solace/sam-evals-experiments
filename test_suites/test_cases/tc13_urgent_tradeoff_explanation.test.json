@@ -1,0 +1,19 @@
+{
+  "test_case_id": "tc13_urgent_tradeoff_explanation",
+  "category": "Decision Quality",
+  "description": "Urgent delivery case must explicitly explain tradeoffs between lead time, reliability, and cost.",
+  "query": "Urgent request: 300 units of X-2847-URGENT for Paris, project PROJ-2026-URGENT budget 55000 EUR, delivery in 5 days. Show why the chosen supplier is best for urgency.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved\n## Supplier\nLead time priority rationale\n## Delivery\nWithin 5 days",
+    "criterion": "Evaluate whether the response justifies the supplier decision using urgency-first reasoning across full trace evidence, not only the final output."
+  }
+}

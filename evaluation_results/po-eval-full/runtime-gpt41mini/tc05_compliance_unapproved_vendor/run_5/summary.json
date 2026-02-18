@@ -1,0 +1,57 @@
+{
+    "test_case_id": "tc05_compliance_unapproved_vendor",
+    "run_id": "run_5",
+    "query": "Need 500 units of X-2847-UNAPP for Paris facility, project PROJ-2026-UNAPP budget 82000 EUR, delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+    "final_status": "working",
+    "final_message": "",
+    "start_time": "2026-02-18T19:07:22.274561",
+    "end_time": "2026-02-18T18:08:04.513472+00:00",
+    "duration_seconds": 42.238911,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_NEVIH7Mat7HeDuPOpQVI83",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-UNAPP at Paris facility (PARIS). Required quantity: 500 units. Report current stock level and shortage quantity if any. Project: PROJ-2026-UNAPP, Budget: 82000 EUR, Delivery target: 2 weeks (delivery date approximately 2026-03-04)."
+            },
+            "timestamp": "2026-02-18T18:07:26.075724+00:00"
+        },
+        {
+            "call_id": "tooluse_6kflGhDTG57eUeVsVWctV2",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T18:07:54.409357+00:00"
+        },
+        {
+            "call_id": "tooluse_iCIbezkXZAybHibRgUHd30",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Find suppliers for component X-2847-UNAPP. Required quantity: 500 units. Delivery target: 2 weeks (approximately 2026-03-04). This is an URGENT request (\u22647 days is standard baseline; current deadline is 2 weeks but inventory lead time is 20 days, creating urgency). Prioritize delivery speed first, then reliability, then cost. Budget: 82000 EUR. Facility: PARIS. Project: PROJ-2026-UNAPP. Recommend best-fit supplier quote considering expedited/standard shipping options."
+            },
+            "timestamp": "2026-02-18T18:08:02.169574+00:00"
+        },
+        {
+            "call_id": "tooluse_QXFtRnmodXq019vac3Cbcx",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "quantity": 500,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T18:08:04.320871+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

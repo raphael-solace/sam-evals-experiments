@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAM-Evals Benchmark Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 400;
+        }
+        
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .info-item {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .info-item strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 1.5rem 0;
+        }
+        
+        .model-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+        }
+        
+        .model-tag {
+            background: #27ae60;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        
+        .test-files {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 5px;
+            margin-top: 0.8rem;
+        }
+        
+        .test-files ul {
+            margin: 0.4rem 0 0 0;
+            padding-left: 1.2rem;
+        }
+        
+        .test-files li {
+            font-size: 0.9rem;
+        }
+        
+        .evaluation-status {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .enabled {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .disabled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .breakdown-container {
+            margin-top: 1rem;
+        }
+        
+        .category-section {
+            margin-bottom: 1.5rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .category-header {
+            background: #f8f9fa;
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .category-header:hover {
+            background: #e9ecef;
+        }
+        
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .category-toggle {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            transition: transform 0.2s;
+        }
+        
+        .category-content {
+            display: none;
+            padding: 0.8rem;
+        }
+        
+        .category-content.active {
+            display: block;
+        }
+        
+        .test-item {
+            background: #f8f9fa;
+            padding: 0.4rem 0.6rem;
+            margin-bottom: 0.3rem;
+            border-radius: 4px;
+            border-left: 3px solid #6c757d;
+            font-size: 0.85rem;
+        }
+        
+        .test-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .test-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+        
+        .test-description {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .model-scores {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.3rem;
+        }
+        
+        .model-score {
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .score-high {
+            background: #27ae60; /* Green background for scores >= 0.7 */
+        }
+        
+        .score-medium {
+            background: #f39c12; /* Yellow/Orange background for scores 0.4-0.69 */
+        }
+        
+        .score-low {
+            background: #e74c3c; /* Red background for scores < 0.4 */
+        }
+        
+        /* Detailed breakdown styles */
+        .model-result {
+            padding: 0.6rem;
+            margin-bottom: 0;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .model-result.score-high {
+            background: #27ae60;
+            border-color: #1e8449;
+        }
+        
+        .model-result.score-medium {
+            background: #f39c12;
+            border-color: #d68910;
+        }
+        
+        .model-result.score-low {
+            background: #e74c3c;
+            border-color: #c0392b;
+        }
+        
+        .model-result .model-score {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .model-result .score-value {
+            background: rgba(255,255,255,0.9);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+            color: #2c3e50;
+        }
+        
+        .model-result .avg-duration {
+            background: rgba(255,255,255,0.9);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+            color: #2c3e50;
+        }
+        
+        .score-value {
+            color: #2c3e50 !important;
+            font-weight: 600 !important;
+        }
+        
+        .success-rate {
+            color: #27ae60 !important;
+        }
+        
+        .avg-duration {
+            color: #2c3e50 !important;
+            font-weight: 600 !important;
+        }
+        
+        .run-count {
+            color: #6c757d !important;
+            font-style: italic;
+        }
+        
+        .model-results {
+            margin-top: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.8rem;
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .model-scores {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+            
+            .test-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.2rem;
+            }
+        }
+    
+
+/* Modal Styles */
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 2% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 1rem;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.modal-description {
+    font-size: 1rem;
+    color: #6c757d;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: #2c3e50;
+}
+
+.modal-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.modal-chart-container {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.modal-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-chart-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.chart-toggle-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.chart-toggle-btn:hover {
+    background: #219a52;
+}
+
+.chart-flip-container {
+    position: relative;
+    height: 300px;
+    perspective: 1000px;
+}
+
+.chart-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform 0.6s;
+}
+
+.chart-front {
+    transform: rotateY(0deg);
+}
+
+.chart-back {
+    transform: rotateY(180deg);
+}
+
+.chart-flip-container.flipped .chart-front {
+    transform: rotateY(-180deg);
+}
+
+.chart-flip-container.flipped .chart-back {
+    transform: rotateY(0deg);
+}
+
+.test-item {
+    cursor: pointer !important;
+    transition: background-color 0.2s;
+}
+
+.test-item:hover {
+    background: #e9ecef !important;
+}
+
+/* Make test names clickable but not hyperlinked */
+.test-name {
+    cursor: pointer !important;
+}
+
+.test-name:hover {
+    color: #2c3e50 !important;
+    font-weight: 700 !important;
+}
+
+.modal-runs-section {
+    margin-top: 2rem;
+    border-top: 2px solid #e9ecef;
+    padding-top: 1.5rem;
+}
+
+.runs-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.runs-section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.runs-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.runs-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.runs-filter label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #495057;
+}
+
+.runs-filter select {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background-color: white;
+    color: #495057;
+    cursor: pointer;
+}
+
+.runs-filter select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.runs-count {
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.runs-container {
+    display: grid;
+    gap: 1rem;
+}
+
+.run-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.run-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.run-model {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.run-scores {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.run-score {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+}
+
+.run-score.response {
+    background: #007bff;
+}
+
+.run-score.tool {
+    background: #6f42c1;
+}
+
+.run-score.llm {
+    background: #28a745;
+}
+
+.run-reasoning {
+    margin-top: 0.75rem;
+}
+
+.reasoning-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.reasoning-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    line-height: 1.5;
+    background: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 5% auto;
+        width: 95%;
+        padding: 1rem;
+    }
+    
+    .modal-charts {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .chart-flip-container {
+        height: 250px;
+    }
+    
+    .modal-chart-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+    
+    .chart-toggle-btn {
+        width: 100%;
+    }
+    
+    .runs-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .runs-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .run-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .run-scores {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+}
+
+</style>
+</head>
+<body>
+    <div class="header">
+        <h1>SAM-Evals Benchmark Report</h1>
+    </div>
+<div class="section">
+    <h2>📊 Benchmark Run Information</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Time of Execution</strong>
+            February 18, 2026 at 06:41 PM
+        </div>
+        <div class="info-item">
+            <strong>Number of Runs</strong>
+            2 runs per test case
+        </div>
+        <div class="info-item">
+            <strong>Total Test Cases</strong>
+            3
+        </div>
+        <div class="info-item">
+            <strong>Evaluation Duration</strong>
+            2 minutes 34 seconds
+        </div>
+    </div>
+
+    <div class="info-item">
+        <strong>Tested Models (1)</strong>
+        <div class="model-list">
+            <span class="model-tag">runtime-gpt41mini</span>
+        </div>
+    </div>
+
+    <div class="test-files">
+        <strong>Test Cases Executed:</strong>
+        <ul>
+            <li>tc01_happy_path_supplier_sourcing.test.json</li><li>tc02_sufficient_inventory_no_sourcing.test.json</li><li>tc03_budget_exceeded.test.json</li>
+        </ul>
+    </div>
+</div>
+<div class="section">
+    <h2>📈 Performance Results</h2>
+    <div class="chart-container" style="position: relative; height: 500px; margin: 20px 0;">
+        <canvas id="performanceChart"></canvas>
+    </div>
+    
+    <!-- Model Execution Times -->
+    <div class="execution-times-section" style="margin-top: 30px;">
+        <h3 style="color: #1f2937; margin-bottom: 15px; font-size: 1.2rem;">Model Execution Times</h3>
+        <div class="execution-times-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            
+                    <div style="background: #f9fafb; padding: 15px; border-radius: 8px; border-left: 4px solid #6b7280; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <div style="font-weight: 600; color: #1f2937; margin-bottom: 5px; font-size: 1rem;">runtime-gpt41mini</div>
+                        <div style="color: #6b7280; font-weight: 700; font-size: 1.25rem; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;">2m 25s</div>
+                        <div style="color: #6b7280; font-size: 0.85rem; margin-top: 2px;">Total execution time</div>
+                    </div>
+                
+        </div>
+    </div>
+    
+</div>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart Data and Configuration -->
+<script>
+// Chart data from backend
+const CATEGORIES_DATA = ["Conditional Flow", "Multi-Agent Workflow", "Policy Enforcement"];
+const CHART_DATASETS_DATA = [{"label": "runtime-gpt41mini", "data": [0.735, 0.885, 0.91], "backgroundColor": "#805190", "borderColor": "#805190", "borderWidth": 1, "borderRadius": 4, "borderSkipped": false}];
+
+// Chart.js configuration for benchmark report - Grouped Bar Chart
+const ctx = document.getElementById('performanceChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: CATEGORIES_DATA,
+        datasets: CHART_DATASETS_DATA
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'LLM Evaluation Scores by Category',
+                font: {
+                    size: 20,
+                    weight: 'bold'
+                },
+                color: '#000000',
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
+            },
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    color: '#000000',
+                    padding: 20,
+                    usePointStyle: true,
+                    font: {
+                        size: 12
+                    }
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleColor: '#ffffff',
+                bodyColor: '#ffffff',
+                borderColor: '#ffffff',
+                borderWidth: 1,
+                callbacks: {
+                    label: function(context) {
+                        const score = context.parsed.y;
+                        const percentage = (score * 100).toFixed(1);
+                        return `${context.dataset.label}: ${score.toFixed(3)} (${percentage}%)`;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 1.0,
+                title: {
+                    display: true,
+                    text: 'Average LLM Evaluation Score',
+                    color: '#000000',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                },
+                ticks: {
+                    stepSize: 0.1,
+                    color: '#000000',
+                    font: {
+                        size: 12
+                    },
+                    callback: function(value) {
+                        return value.toFixed(1);
+                    }
+                },
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)',
+                    lineWidth: 1
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Task Categories',
+                    color: '#000000',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                },
+                ticks: {
+                    color: '#000000',
+                    font: {
+                        size: 12,
+                        weight: 'bold'
+                    }
+                },
+                grid: {
+                    display: false
+                }
+            }
+        },
+        elements: {
+            bar: {
+                borderWidth: 1,
+                borderRadius: 4,
+                borderSkipped: false
+            }
+        }
+    }
+});
+</script>
+<div class="section">
+    <h2>📋 Detailed Test Breakdown</h2>
+    <div class="breakdown-container">
+        
+                    <div class="category-section">
+                        <div class="category-header">
+                            <h3 class="category-title">Conditional Flow (1 test case)</h3>
+                            <span class="category-toggle">▶</span>
+                        </div>
+                        <div class="category-content">
+                            
+                        <div class="test-item"
+                             data-test-name="tc02_sufficient_inventory_no_sourcing"
+                             data-test-description="Inventory is sufficient and supplier sourcing should be skipped."
+                             data-test-data="{&quot;model_scores&quot;: {&quot;runtime-gpt41mini&quot;: 0.14944128737126872}, &quot;tool_scores&quot;: {&quot;runtime-gpt41mini&quot;: 1.0}, &quot;individual_runs&quot;: {&quot;runtime-gpt41mini&quot;: [{&quot;run_number&quot;: 1, &quot;response_score&quot;: 0.15380962481076474, &quot;tool_score&quot;: 1.0, &quot;llm_eval&quot;: 0.72, &quot;llm_reasoning&quot;: &quot;The actual response demonstrates several strengths and weaknesses against the stated criterion:\n\n**Strengths:**\n1. **Correctly skips external supplier sourcing** - The system confirmed internal stock availability (1,200 units) and appropriately bypassed supplier querying, which is the core requirement\n2. **Generates compliant fulfillment decision** - Creates PO-65062865 with proper documentation and internal transfer allocation\n3. **Budget validation** - Confirms zero external cost against the EUR 75,000 budget\n4. **Accurate inventory confirmation** - Verifies 500 units are available from PARIS facility stock\n5. **Structured output** - Provides clear information on delivery, cost center (CC-PAR-4100), and timeline\n\n**Weaknesses:**\n1. **Introduces unnecessary compliance friction** - Flags INTERNAL_TRANSFER as \&quot;not on approved vendor list\&quot; despite this being an internal operation. This creates a procedural barrier that undermines the efficiency intent of the \&quot;skip supplier sourcing\&quot; instruction\n2. **Deviates from expected response format** - The expected response shows a simpler approval structure (\&quot;## Decision: Approved\&quot;), while the actual response adds complexity with compliance warnings that may not be necessary for legitimate internal transfers\n3. **Delays finality** - Requires additional manual procurement authority approval before execution, which contradicts the directive to \&quot;proceed directly\&quot; when inventory is sufficient\n4. **Compliance flag is arguably misplaced** - Internal inventory transfers should typically have pre-established approval pathways that don't require treating them like external vendors\n\n**Assessment:**\nThe response successfully accomplishes the primary objective (skip sourcing, fulfill from stock) and maintains budget/compliance awareness. However, it introduces a secondary compliance gate that seems overly bureaucratic for an internal operation, potentially contradicting the efficiency intent. The actual behavior is \&quot;adequate to good\&quot; - it works but adds unnecessary friction that a truly optimized system might avoid through better configuration of internal transfer procedures.\n\nThe response is functional and safe, but not optimally streamlined per the criterion's expectations.&quot;, &quot;execution_time&quot;: 30.43259, &quot;query&quot;: &quot;&quot;, &quot;actual_response&quot;: &quot;&quot;, &quot;expected_response&quot;: &quot;&quot;}, {&quot;run_number&quot;: 2, &quot;response_score&quot;: 0.1450729499317727, &quot;tool_score&quot;: 1.0, &quot;llm_eval&quot;: 0.75, &quot;llm_reasoning&quot;: &quot;The actual response demonstrates several strengths and notable weaknesses against the stated criterion:\n\n**Strengths:**\n1. **Supplier sourcing successfully skipped** \u2014 The response correctly identifies sufficient inventory (1,200 units vs. 500 required) and explicitly states \&quot;Supplier sourcing **skipped as requested**,\&quot; fulfilling the primary workflow requirement.\n2. **Budget validation completed** \u2014 The \u20ac75,000 budget is properly validated and approved under project PROJ-2026-45.\n3. **Inventory check passed** \u2014 Quantitative confirmation of stock availability is clearly documented.\n4. **PO generated** \u2014 A valid internal transfer PO (PO-81785364) is created with appropriate cost allocation.\n5. **Delivery timeline provided** \u2014 Estimated 2-day delivery is realistic for internal transfers.\n\n**Weaknesses:**\n1. **Compliance friction undermines the directive** \u2014 While the response acknowledges the user's request to \&quot;skip supplier sourcing,\&quot; it introduces an unexpected compliance exception requiring \&quot;manual approval from procurement leadership.\&quot; This creates operational friction that contradicts the user's explicit instruction to \&quot;proceed directly.\&quot;\n2. **Ambiguous authority** \u2014 The response doesn't clarify whether the user has authority to bypass compliance requirements. If they do, the exception should not be raised; if they don't, the initial instruction was inappropriate to honor.\n3. **Mixed compliance messaging** \u2014 The response both approves the action (creates the PO) and blocks it (requires manual override), creating process ambiguity about the actual status.\n4. **Expected response template not fully matched** \u2014 The expected template is simpler and more decisive; the actual response adds complexity that may not align with what an automated fulfillment system should deliver.\n\n**Assessment:**\nThe response *functionally* meets the criterion by skipping external sourcing when inventory is sufficient and providing compliant budget validation. However, it introduces unnecessary procedural friction through the compliance exception, which may indicate either incomplete requirement understanding or legitimate policy concerns not addressed in the original query.&quot;, &quot;execution_time&quot;: 29.901136, &quot;query&quot;: &quot;&quot;, &quot;actual_response&quot;: &quot;&quot;, &quot;expected_response&quot;: &quot;&quot;}]}}">
+                            <div class="test-header">
+                                <span class="test-name">tc02_sufficient_inventory_no_sourcing</span>
+                                <span class="test-description">Inventory is sufficient and supplier sourcing should be skipped.</span>
+                            </div>
+                            <div class="model-results">
+                                
+                                    <div class="model-result score-high">
+                                        <span class="model-score">runtime-gpt41mini</span>
+                                        <span class="score-value">LLM Eval: 0.735</span>
+                                        <span class="avg-duration">Avg time: 30.2s</span>
+                                    </div>
+                                
+                            </div>
+                        </div>
+                    
+                        </div>
+                    </div>
+                
+                    <div class="category-section">
+                        <div class="category-header">
+                            <h3 class="category-title">Multi-Agent Workflow (1 test case)</h3>
+                            <span class="category-toggle">▶</span>
+                        </div>
+                        <div class="category-content">
+                            
+                        <div class="test-item"
+                             data-test-name="tc01_happy_path_supplier_sourcing"
+                             data-test-description="Component shortage triggers supplier sourcing, compliance passes, budget passes, PO is created."
+                             data-test-data="{&quot;model_scores&quot;: {&quot;runtime-gpt41mini&quot;: 0.12417940922839596}, &quot;tool_scores&quot;: {&quot;runtime-gpt41mini&quot;: 1.0}, &quot;individual_runs&quot;: {&quot;runtime-gpt41mini&quot;: [{&quot;run_number&quot;: 2, &quot;response_score&quot;: 0.12022000902917376, &quot;tool_score&quot;: 1.0, &quot;llm_eval&quot;: 0.85, &quot;llm_reasoning&quot;: &quot;The actual response demonstrates strong performance across most lifecycle components with minor inconsistencies:\n\n**Strengths (Supporting High Score):**\n1. \u2705 **Inventory Shortage Detected**: Response identifies that 460 units were ordered (implying 40 existing units detected), totaling the requested 500 units\n2. \u2705 **Supplier Quotes Retrieved**: Alpha Components GmbH provided with specific unit price (\u20ac117.66/unit) and delivery timeline (12 days)\n3. \u2705 **Compliant Supplier Selected**: Pre-qualified vendor with 0.94 reliability score; authorization and policy compliance explicitly validated\n4. \u2705 **Budget Validated**: \u20ac54,123.60 cost against \u20ac75,000 budget (72.2% utilization) with buffer calculation shown\n5. \u2705 **PO Number Issued**: PO-74190162 clearly provided with status tracking\n6. \u2705 **Delivery Estimate**: 2026-03-01 with 9-day buffer against 3-week requirement\n7. \u2705 **Cost Center Assigned**: CC-PAR-4100 properly mapped to Paris facility\n8. \u2705 **Comprehensive Format**: Response exceeds expected template with actionable next steps and detailed compliance verification\n\n**Minor Issues (Preventing Perfect Score):**\n1. **Quantity Discrepancy**: Order for 500 units resulted in only 460 units ordered (40-unit shortfall). While this may reflect supplier availability constraints, it wasn't explicitly justified or flagged as a deviation from the original request\n2. **Expected Response Format Not Followed**: The expected response showed a simplified table format, while the actual response provided enhanced detail. While this adds value, it technically diverges from the specified template\n3. **Implicit Assumptions**: The response assumes inventory buffers (40 existing units) without explicitly stating where this information was sourced\n\n**Overall Assessment**: The response successfully completes the full procurement lifecycle with professional detail, compliance verification, and risk mitigation. The primary concern is the unexplained 40-unit order reduction, which should have been flagged as a variance requiring clarification or approval.&quot;, &quot;execution_time&quot;: 53.525501, &quot;query&quot;: &quot;&quot;, &quot;actual_response&quot;: &quot;&quot;, &quot;expected_response&quot;: &quot;&quot;}, {&quot;run_number&quot;: 1, &quot;response_score&quot;: 0.12813880942761816, &quot;tool_score&quot;: 1.0, &quot;llm_eval&quot;: 0.92, &quot;llm_reasoning&quot;: &quot;The actual response demonstrates excellent execution across the full procurement lifecycle criterion:\n\n**Strengths:**\n\n1. **Inventory Shortage Detection** \u2705 - The response implies shortage recognition by proceeding with urgent procurement for 500 units with a 3-week delivery requirement.\n\n2. **Supplier Quotes Retrieved** \u2705 - Alpha Components GmbH is presented as a selected supplier with detailed metrics (Reliability Score: 0.94, delivery in 12 days, cost \u20ac61,820).\n\n3. **Compliant Supplier Selected** \u2705 - Explicit compliance validation shown with checkmarks, supplier eligibility confirmed, and reasoning provided (optimal balance of speed, reliability, and cost).\n\n4. **Budget Validated** \u2705 - Budget compliance clearly verified: \u20ac61,820 is within \u20ac75,000 threshold, with detailed cost center tracking (CC-PAR-4100) and 82.4% utilization rate calculated.\n\n5. **PO Number Issued** \u2705 - PO-41443107 is generated with full details (quantity, cost, status as \&quot;Created & Financially Approved\&quot;).\n\n6. **Delivery Estimate Provided** \u2705 - Specific delivery date of February 25, 2026 (12 calendar days) confirmed for Paris facility.\n\n7. **Cost Center Assignment** \u2705 - Properly allocated to CC-PAR-4100 with budget reconciliation.\n\n**Minor Deviations from Expected Format:**\n- The expected response template shows minimal structure, while the actual response provides comprehensive detail. This is an enhancement rather than a deficiency.\n- The expected format lists \&quot;PO-\&quot; incomplete, whereas actual response provides complete PO-41443107.\n\n**Small Gap:**\n- No explicit mention of multiple supplier quotes comparison (though \&quot;highest qualified supplier\&quot; implies comparison occurred), though context suggests this occurred in the selection process.\n\nThe response fully satisfies all lifecycle requirements with excellent documentation and actionable next steps.&quot;, &quot;execution_time&quot;: 48.809698, &quot;query&quot;: &quot;&quot;, &quot;actual_response&quot;: &quot;&quot;, &quot;expected_response&quot;: &quot;&quot;}]}}">
+                            <div class="test-header">
+                                <span class="test-name">tc01_happy_path_supplier_sourcing</span>
+                                <span class="test-description">Component shortage triggers supplier sourcing, compliance passes, budget passes, PO is created.</span>
+                            </div>
+                            <div class="model-results">
+                                
+                                    <div class="model-result score-high">
+                                        <span class="model-score">runtime-gpt41mini</span>
+                                        <span class="score-value">LLM Eval: 0.885</span>
+                                        <span class="avg-duration">Avg time: 51.2s</span>
+                                    </div>
+                                
+                            </div>
+                        </div>
+                    
+                        </div>
+                    </div>
+                
+                    <div class="category-section">
+                        <div class="category-header">
+                            <h3 class="category-title">Policy Enforcement (1 test case)</h3>
+                            <span class="category-toggle">▶</span>
+                        </div>
+                        <div class="category-content">
+                            
+                        <div class="test-item"
+                             data-test-name="tc03_budget_exceeded"
+                             data-test-description="Sourcing works but budget is exceeded, so no automatic PO should be created."
+                             data-test-data="{&quot;model_scores&quot;: {&quot;runtime-gpt41mini&quot;: 0.08653544816421163}, &quot;tool_scores&quot;: {&quot;runtime-gpt41mini&quot;: 0.75}, &quot;individual_runs&quot;: {&quot;runtime-gpt41mini&quot;: [{&quot;run_number&quot;: 1, &quot;response_score&quot;: 0.08297312363709627, &quot;tool_score&quot;: 1.0, &quot;llm_eval&quot;: 0.92, &quot;llm_reasoning&quot;: &quot;The actual response demonstrates excellent adherence to the evaluation criterion with only minor deviations from expectations.\n\n**Strengths:**\n\n1. **Correct Decision Blocking:** The system properly identifies and blocks PO creation, explicitly stating \&quot;\u274c NOT CREATED\&quot; with clear reasoning tied to budget insufficiency (\u20ac12,000 allocated vs. \u20ac54,123.60 required).\n\n2. **Budget Variance Identification:** The response accurately calculates and communicates the budget shortfall (\u20ac42,123.60 / +352% variance), making the financial constraint unambiguous.\n\n3. **Escalation Pathway:** Provides specific escalation guidance with identified authority (\&quot;Finance Director\&quot;) and required actions (budget variance approval before PO auto-generation).\n\n4. **Compliance with Criterion:** The system does NOT create an approved PO despite having supplier and delivery information\u2014this is the core requirement and is fully satisfied.\n\n5. **Comprehensive Context:** Beyond the criterion minimum, the response provides valuable supplementary information:\n   - Alternative sourcing options (FastParts BV)\n   - Delivery timeline confirmation (12 days meets 14-day requirement)\n   - Practical alternatives (reduce order, phased procurement, renegotiate pricing)\n   - Cost center assignment and vendor reliability metrics\n\n**Minor Deviations from Expected Response:**\n\n1. **Response Length:** The actual response is substantially more detailed than the minimalist expected format. However, this represents added value rather than a failure to meet requirements.\n\n2. **Format Variance:** Expected response uses simple sections; actual response includes status badges, detailed tables, and structured workflow. Again, this adds clarity rather than introducing errors.\n\n3. **Information Density:** The expected response implies a terse acknowledgment, while the actual provides actionable intelligence. This is a design choice that enhances usability.\n\n**Critical Assessment:**\n- \u2705 Correctly prevents unauthorized spending (budget exceeded)\n- \u2705 Blocks PO creation as required\n- \u2705 Provides escalation guidance\n- \u2705 No PO artifact created inappropriately\n- \u2705 Compliance status accurately reported\n\nThe only reason this is not a perfect 1.0 is the assumption that the extensive detail, while beneficial, might slightly exceed the intended scope of a strict \&quot;block and escalate\&quot; scenario. However, there are no factual errors or criterion violations present.&quot;, &quot;execution_time&quot;: 53.524689, &quot;query&quot;: &quot;&quot;, &quot;actual_response&quot;: &quot;&quot;, &quot;expected_response&quot;: &quot;&quot;}, {&quot;run_number&quot;: 2, &quot;response_score&quot;: 0.090097772691327, &quot;tool_score&quot;: 0.5, &quot;llm_eval&quot;: 0.9, &quot;llm_reasoning&quot;: &quot;The actual response demonstrates excellent adherence to the criterion with only minor deviations from the expected response structure.\n\n**Strengths:**\n\n1. **Correctly Blocks PO Creation**: The response explicitly states \&quot;**Status:** Not yet created pending budget clarification\&quot; and \&quot;No PO created\&quot; in substance, which directly matches the expected behavior of preventing PO issuance when budget constraints exist.\n\n2. **Clear Escalation Guidance**: The response provides comprehensive escalation instructions with three specific pathways for budget resolution (revise upward, clarify as partial allocation, or reframe as unit-cost cap), going beyond the expected response's brevity while maintaining the core escalation requirement.\n\n3. **Budget Constraint Identification**: The system correctly identifies that \&quot;Budget exceeded\&quot; (matching the expected response criterion), with precise quantification showing the \u20ac12,000 budget represents only 22% of the lowest quote\u2014demonstrating robust financial validation logic.\n\n4. **Detailed Decision Rationale**: The response explains the gap clearly (\u20ac12,000 vs. \u20ac54,123.60\u2013\u20ac62,169.00) rather than simply stating the constraint, which enhances auditability and stakeholder understanding.\n\n5. **Maintains Critical Information**: Includes supplier recommendations (Alpha Components), delivery timeline validation (12 days meets 2-week requirement), and cost-center tracking, providing context for decision-makers.\n\n**Minor Deviations:**\n\n1. **Response Format Verbosity**: The actual response is significantly more detailed than the expected response template, which uses minimal formatting. While this adds value, it slightly departs from the expected conciseness, though this is a strength rather than weakness.\n\n2. **Supplier Information Provided Before Approval**: The response recommends Alpha Components GmbH with specific details before budget authorization. While appropriately marked as \&quot;pending,\&quot; best practice might reserve full supplier details for post-approval stages, though the \&quot;pending\&quot; qualifier mitigates this concern.\n\n**Criterion Fulfillment:**\n- \u2713 Blocks PO creation when budget unavailable\n- \u2713 Provides clear escalation guidance\n- \u2713 Identifies budget exceeded status\n- \u2713 Offers actionable next steps for authorization\n\nThe response exceeds the expected output in substance while maintaining compliance with the core criterion.&quot;, &quot;execution_time&quot;: 33.206662, &quot;query&quot;: &quot;&quot;, &quot;actual_response&quot;: &quot;&quot;, &quot;expected_response&quot;: &quot;&quot;}]}}">
+                            <div class="test-header">
+                                <span class="test-name">tc03_budget_exceeded</span>
+                                <span class="test-description">Sourcing works but budget is exceeded, so no automatic PO should be created.</span>
+                            </div>
+                            <div class="model-results">
+                                
+                                    <div class="model-result score-high">
+                                        <span class="model-score">runtime-gpt41mini</span>
+                                        <span class="score-value">LLM Eval: 0.910</span>
+                                        <span class="avg-duration">Avg time: 43.4s</span>
+                                    </div>
+                                
+                            </div>
+                        </div>
+                    
+                        </div>
+                    </div>
+                
+    </div>
+</div>
+
+<script>
+// JavaScript for category dropdown functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryHeaders = document.querySelectorAll('.category-header');
+    
+    categoryHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const toggle = this.querySelector('.category-toggle');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                toggle.textContent = '▶';
+            } else {
+                content.classList.add('active');
+                toggle.textContent = '▼';
+            }
+        });
+    });
+});
+</script>
+
+<!-- Modal for test details -->
+<div id="testModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Test Details</h2>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-description" id="modalDescription"></div>
+        <div class="modal-charts">
+            <div class="modal-chart-container">
+                <div class="modal-chart-header">
+                    <div class="modal-chart-title">Response Scores by Model</div>
+                    <button class="chart-toggle-btn" onclick="toggleChart('response')">Show Quartiles</button>
+                </div>
+                <div class="chart-flip-container" id="responseChartContainer">
+                    <div class="chart-face chart-front">
+                        <canvas id="responseChart"></canvas>
+                    </div>
+                    <div class="chart-face chart-back">
+                        <canvas id="responseQuartileChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-chart-container">
+                <div class="modal-chart-header">
+                    <div class="modal-chart-title">Tool Scores by Model</div>
+                    <button class="chart-toggle-btn" onclick="toggleChart('tool')">Show Quartiles</button>
+                </div>
+                <div class="chart-flip-container" id="toolChartContainer">
+                    <div class="chart-face chart-front">
+                        <canvas id="toolChart"></canvas>
+                    </div>
+                    <div class="chart-face chart-back">
+                        <canvas id="toolQuartileChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-runs-section">
+            <div class="runs-section-header">
+                <h3 class="runs-section-title">Individual Run Details</h3>
+                <div class="runs-controls">
+                    <div class="runs-filter">
+                        <label for="modelFilter">Filter by Model:</label>
+                        <select id="modelFilter" onchange="filterRuns()">
+                            <option value="all">All Models</option>
+                        </select>
+                    </div>
+                    <div class="runs-count">
+                        <span id="runsCount">Showing all runs</span>
+                    </div>
+                </div>
+            </div>
+            <div id="runsContainer" class="runs-container">
+                <!-- Individual runs will be populated here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot"></script>
+<script>
+// Chart creation functions for modal
+
+function createResponseChart(testData) {
+    const ctx = document.getElementById('responseChart').getContext('2d');
+    
+    const models = Object.keys(testData.model_scores);
+    const responseScores = models.map(model => testData.model_scores[model]);
+    
+    responseChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: models.map(model => model),
+            datasets: [{
+                label: 'Response Score',
+                data: responseScores,
+                backgroundColor: responseScores.map(score => getScoreColor(score)),
+                borderColor: responseScores.map(score => getScoreColor(score)),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 10,
+                            weight: 'normal'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+function createToolChart(testData) {
+    const ctx = document.getElementById('toolChart').getContext('2d');
+    
+    const models = Object.keys(testData.model_scores);
+    const toolScores = models.map(model => {
+        // Use actual tool scores if available, otherwise generate mock data
+        if (testData.tool_scores && testData.tool_scores[model] !== undefined) {
+            return testData.tool_scores[model];
+        } else {
+            // Generate mock tool scores based on response scores with some variation
+            const responseScore = testData.model_scores[model];
+            return Math.max(0, Math.min(1, responseScore + (Math.random() - 0.5) * 0.3));
+        }
+    });
+    
+    toolChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: models.map(model => model),
+            datasets: [{
+                label: 'Tool Score',
+                data: toolScores,
+                backgroundColor: toolScores.map(score => getScoreColor(score)),
+                borderColor: toolScores.map(score => getScoreColor(score)),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 10,
+                            weight: 'normal'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+function createResponseQuartileChart(testData) {
+    const ctx = document.getElementById('responseQuartileChart').getContext('2d');
+    
+    const models = Object.keys(testData.model_scores);
+    const responseScores = models.map(model => testData.model_scores[model]);
+    
+    // Create custom boxplot data
+    const boxplotData = models.map((model, index) => {
+        // Check if we have individual run data for this model
+        const individualRuns = testData.individual_runs && testData.individual_runs[model];
+        
+        if (individualRuns && individualRuns.length > 1) {
+            // Use actual individual run data to calculate real quartiles
+            const scores = individualRuns.map(run => run.response_score).sort((a, b) => a - b);
+            const quartileData = calculateActualQuartiles(scores);
+            
+            return {
+                x: index,
+                min: quartileData.min,
+                q1: quartileData.q1,
+                median: quartileData.median,
+                q3: quartileData.q3,
+                max: quartileData.max,
+                outliers: quartileData.outliers
+            };
+        } else {
+            // Single data point - show as a line (all values the same)
+            const score = testData.model_scores[model];
+            return {
+                x: index,
+                min: score,
+                q1: score,
+                median: score,
+                q3: score,
+                max: score,
+                outliers: []
+            };
+        }
+    });
+    
+    responseQuartileChart = new Chart(ctx, {
+        type: 'boxplot',
+        data: {
+            labels: models,
+            datasets: [{
+                label: 'Response Score Distribution',
+                data: boxplotData,
+                backgroundColor: responseScores.map(score => getScoreColor(score) + '80'),
+                borderColor: responseScores.map(score => getScoreColor(score)),
+                borderWidth: 2,
+                outlierColor: '#999999',
+                outlierRadius: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 10,
+                            weight: 'normal'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const data = context.parsed;
+                            if (data.min === data.max) {
+                                return `Single value: ${data.min.toFixed(3)}`;
+                            }
+                            return [
+                                `Min: ${data.min.toFixed(3)}`,
+                                `Q1: ${data.q1.toFixed(3)}`,
+                                `Median: ${data.median.toFixed(3)}`,
+                                `Q3: ${data.q3.toFixed(3)}`,
+                                `Max: ${data.max.toFixed(3)}`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createToolQuartileChart(testData) {
+    const ctx = document.getElementById('toolQuartileChart').getContext('2d');
+    
+    const models = Object.keys(testData.model_scores);
+    const toolScores = models.map(model => {
+        if (testData.tool_scores && testData.tool_scores[model] !== undefined) {
+            return testData.tool_scores[model];
+        } else {
+            const responseScore = testData.model_scores[model];
+            return Math.max(0, Math.min(1, responseScore + (Math.random() - 0.5) * 0.3));
+        }
+    });
+    
+    // Create custom boxplot data
+    const boxplotData = models.map((model, index) => {
+        // Check if we have individual run data for this model
+        const individualRuns = testData.individual_runs && testData.individual_runs[model];
+        
+        if (individualRuns && individualRuns.length > 1) {
+            // Use actual individual run data to calculate real quartiles
+            const scores = individualRuns.map(run => run.tool_score).sort((a, b) => a - b);
+            const quartileData = calculateActualQuartiles(scores);
+            
+            return {
+                x: index,
+                min: quartileData.min,
+                q1: quartileData.q1,
+                median: quartileData.median,
+                q3: quartileData.q3,
+                max: quartileData.max,
+                outliers: quartileData.outliers
+            };
+        } else {
+            // Single data point - show as a line (all values the same)
+            const score = toolScores[index];
+            return {
+                x: index,
+                min: score,
+                q1: score,
+                median: score,
+                q3: score,
+                max: score,
+                outliers: []
+            };
+        }
+    });
+    
+    toolQuartileChart = new Chart(ctx, {
+        type: 'boxplot',
+        data: {
+            labels: models,
+            datasets: [{
+                label: 'Tool Score Distribution',
+                data: boxplotData,
+                backgroundColor: toolScores.map(score => getScoreColor(score) + '80'),
+                borderColor: toolScores.map(score => getScoreColor(score)),
+                borderWidth: 2,
+                outlierColor: '#999999',
+                outlierRadius: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 10,
+                            weight: 'normal'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const data = context.parsed;
+                            if (data.min === data.max) {
+                                return `Single value: ${data.min.toFixed(3)}`;
+                            }
+                            return [
+                                `Min: ${data.min.toFixed(3)}`,
+                                `Q1: ${data.q1.toFixed(3)}`,
+                                `Median: ${data.median.toFixed(3)}`,
+                                `Q3: ${data.q3.toFixed(3)}`,
+                                `Max: ${data.max.toFixed(3)}`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function calculateActualQuartiles(sortedScores) {
+    const n = sortedScores.length;
+    
+    if (n === 0) {
+        return { min: 0, q1: 0, median: 0, q3: 0, max: 0, outliers: [] };
+    }
+    
+    if (n === 1) {
+        const value = sortedScores[0];
+        return { min: value, q1: value, median: value, q3: value, max: value, outliers: [] };
+    }
+    
+    // Calculate quartiles using the standard method
+    const min = sortedScores[0];
+    const max = sortedScores[n - 1];
+    
+    // Calculate median (Q2)
+    let median;
+    if (n % 2 === 0) {
+        median = (sortedScores[n / 2 - 1] + sortedScores[n / 2]) / 2;
+    } else {
+        median = sortedScores[Math.floor(n / 2)];
+    }
+    
+    // Calculate Q1 (first quartile)
+    const q1Index = Math.floor(n / 4);
+    let q1;
+    if (n % 4 === 0) {
+        q1 = (sortedScores[q1Index - 1] + sortedScores[q1Index]) / 2;
+    } else {
+        q1 = sortedScores[q1Index];
+    }
+    
+    // Calculate Q3 (third quartile)
+    const q3Index = Math.floor(3 * n / 4);
+    let q3;
+    if (n % 4 === 0) {
+        q3 = (sortedScores[q3Index - 1] + sortedScores[q3Index]) / 2;
+    } else {
+        q3 = sortedScores[q3Index];
+    }
+    
+    // For now, we'll not calculate outliers to keep it simple
+    // In a full implementation, outliers would be values outside 1.5 * IQR from Q1/Q3
+    
+    return {
+        min: min,
+        q1: q1,
+        median: median,
+        q3: q3,
+        max: max,
+        outliers: []
+    };
+}
+
+function getScoreColor(score) {
+    if (score >= 0.7) {
+        return '#27ae60'; // Green
+    } else if (score >= 0.4) {
+        return '#f39c12'; // Orange
+    } else {
+        return '#e74c3c'; // Red
+    }
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('testModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+});
+
+</script>
+<script>
+// Modal functionality for test details
+let responseChart = null;
+let toolChart = null;
+let responseQuartileChart = null;
+let toolQuartileChart = null;
+let currentTestData = null;
+let allRuns = [];
+
+// Track chart states
+let chartStates = {
+    response: 'bar', // 'bar' or 'quartile'
+    tool: 'bar'
+};
+
+// Initialize modal event listeners when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click listeners to all test items
+    document.querySelectorAll('.test-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const testName = this.dataset.testName;
+            const testDescription = this.dataset.testDescription;
+            const testData = JSON.parse(this.dataset.testData);
+            openTestModal(testName, testDescription, testData);
+        });
+    });
+});
+
+function openTestModal(testName, testDescription, testData) {
+    const modal = document.getElementById('testModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    
+    modalTitle.textContent = testName;
+    modalDescription.textContent = testDescription;
+    
+    // Store current test data
+    currentTestData = testData;
+    
+    // Reset chart states
+    chartStates.response = 'bar';
+    chartStates.tool = 'bar';
+    
+    // Reset flip containers
+    document.getElementById('responseChartContainer').classList.remove('flipped');
+    document.getElementById('toolChartContainer').classList.remove('flipped');
+    
+    // Reset button texts
+    document.querySelector('[onclick="toggleChart(\'response\')"]').textContent = 'Show Quartiles';
+    document.querySelector('[onclick="toggleChart(\'tool\')"]').textContent = 'Show Quartiles';
+    
+    // Destroy existing charts if they exist
+    destroyAllCharts();
+    
+    // Show modal
+    modal.style.display = 'block';
+    
+    // Create charts after modal is visible
+    setTimeout(() => {
+        createResponseChart(testData);
+        createToolChart(testData);
+        createResponseQuartileChart(testData);
+        createToolQuartileChart(testData);
+        setupModelFilter(testData);
+        populateRunDetails(testData);
+    }, 100);
+}
+
+function closeModal() {
+    const modal = document.getElementById('testModal');
+    modal.style.display = 'none';
+    
+    // Destroy all charts when closing
+    destroyAllCharts();
+    
+    // Reset data
+    currentTestData = null;
+    allRuns = [];
+}
+
+function destroyAllCharts() {
+    if (responseChart) {
+        responseChart.destroy();
+        responseChart = null;
+    }
+    if (toolChart) {
+        toolChart.destroy();
+        toolChart = null;
+    }
+    if (responseQuartileChart) {
+        responseQuartileChart.destroy();
+        responseQuartileChart = null;
+    }
+    if (toolQuartileChart) {
+        toolQuartileChart.destroy();
+        toolQuartileChart = null;
+    }
+}
+
+function toggleChart(chartType) {
+    const container = document.getElementById(chartType + 'ChartContainer');
+    const button = document.querySelector(`[onclick="toggleChart('${chartType}')"]`);
+    
+    container.classList.toggle('flipped');
+    
+    if (chartStates[chartType] === 'bar') {
+        chartStates[chartType] = 'quartile';
+        button.textContent = 'Show Bar Chart';
+    } else {
+        chartStates[chartType] = 'bar';
+        button.textContent = 'Show Quartiles';
+    }
+}
+
+function setupModelFilter(testData) {
+    const modelFilter = document.getElementById('modelFilter');
+    const models = Object.keys(testData.model_scores);
+    
+    // Clear existing options except "All Models"
+    modelFilter.innerHTML = '<option value="all">All Models</option>';
+    
+    // Add model options
+    models.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model;
+        option.textContent = model;
+        modelFilter.appendChild(option);
+    });
+    
+    // Reset to "All Models"
+    modelFilter.value = 'all';
+}
+
+function filterRuns() {
+    if (!currentTestData) return;
+    
+    const selectedModel = document.getElementById('modelFilter').value;
+    populateRunDetails(currentTestData, selectedModel);
+}
+
+function populateRunDetails(testData, filterModel = 'all') {
+    const runsContainer = document.getElementById('runsContainer');
+    const runsCount = document.getElementById('runsCount');
+    runsContainer.innerHTML = '';
+    
+    // Extract individual runs from the actual test data structure
+    allRuns = [];
+    
+    // Check if we have individual_runs data in the testData
+    if (testData.individual_runs) {
+        // Use the actual individual runs data
+        const models = Object.keys(testData.model_scores);
+        
+        models.forEach(model => {
+            if (filterModel !== 'all' && model !== filterModel) {
+                return; // Skip this model if filtering
+            }
+            
+            // Get individual runs for this model from the actual data
+            const modelRuns = testData.individual_runs[model] || [];
+            
+            modelRuns.forEach(run => {
+                allRuns.push({
+                    model: model,
+                    runNumber: run.run_number,
+                    responseScore: run.response_score,
+                    toolScore: run.tool_score,
+                    llmScore: run.llm_eval,
+                    reasoning: run.llm_reasoning || 'No reasoning provided',
+                    query: run.query || '',
+                    actualResponse: run.actual_response || '',
+                    expectedResponse: run.expected_response || '',
+                    executionTime: run.execution_time || 'N/A' // Add execution time with 'N/A' fallback
+                });
+            });
+        });
+    } else {
+        // Fallback: generate mock runs based on average scores (for backward compatibility)
+        const models = Object.keys(testData.model_scores);
+        
+        models.forEach(model => {
+            if (filterModel !== 'all' && model !== filterModel) {
+                return; // Skip this model if filtering
+            }
+            
+            const responseScore = testData.model_scores[model];
+            const toolScore = testData.tool_scores && testData.tool_scores[model] !== undefined 
+                ? testData.tool_scores[model] 
+                : Math.max(0, Math.min(1, responseScore + (Math.random() - 0.5) * 0.3));
+            
+            // Generate 3-5 mock runs for this model
+            const numRuns = Math.floor(Math.random() * 3) + 3; // 3-5 runs
+            
+            for (let i = 0; i < numRuns; i++) {
+                const runResponseScore = Math.max(0, Math.min(1, responseScore + (Math.random() - 0.5) * 0.2));
+                const runToolScore = Math.max(0, Math.min(1, toolScore + (Math.random() - 0.5) * 0.2));
+                
+                allRuns.push({
+                    model: model,
+                    runNumber: i + 1,
+                    responseScore: runResponseScore,
+                    toolScore: runToolScore,
+                    reasoning: generateMockReasoning(runResponseScore, runToolScore, model, i + 1),
+                    query: '',
+                    actualResponse: '',
+                    expectedResponse: ''
+                });
+            }
+        });
+    }
+    
+    // Update runs count
+    const totalRuns = allRuns.length;
+    const modelText = filterModel === 'all' ? 'all models' : filterModel;
+    runsCount.textContent = `Showing ${totalRuns} runs for ${modelText}`;
+    
+    // Sort runs by model and run number
+    allRuns.sort((a, b) => {
+        if (a.model !== b.model) {
+            return a.model.localeCompare(b.model);
+        }
+        return a.runNumber - b.runNumber;
+    });
+    
+    // Create run items
+    allRuns.forEach(run => {
+        const runItem = document.createElement('div');
+        runItem.className = 'run-item';
+        
+        const llmScoreHtml = run.llmScore !== null ? 
+            `<div class="run-score llm">LLM Eval: ${run.llmScore.toFixed(3)}</div>` : '';
+        
+        runItem.innerHTML = `
+            <div class="run-header">
+                <div class="run-model">[Run ${run.runNumber}] ${run.model}</div>
+                <div class="run-scores">
+                    <div class="run-score response">Response: ${run.responseScore.toFixed(3)}</div>
+                    <div class="run-score tool">Tool: ${run.toolScore.toFixed(3)}</div>
+                    ${llmScoreHtml}
+                </div>
+            </div>
+            <div class="run-reasoning">
+                <div class="reasoning-label">Evaluation Reasoning:</div>
+                <div class="reasoning-text">${run.reasoning}</div>
+            </div>
+            <div class="run-performance">
+                <div class="run-execution-time">Execution Time: ${typeof run.executionTime === 'number' ? run.executionTime.toFixed(3) + 's' : run.executionTime}</div>
+            </div>
+        `;
+        
+        runsContainer.appendChild(runItem);
+    });
+}
+
+function generateMockReasoning(responseScore, toolScore, model, runNumber) {
+    let responseQuality = '';
+    let toolUsage = '';
+    
+    if (responseScore >= 0.8) {
+        responseQuality = 'excellent response quality with comprehensive and accurate information';
+    } else if (responseScore >= 0.6) {
+        responseQuality = 'good response quality with mostly accurate information';
+    } else if (responseScore >= 0.4) {
+        responseQuality = 'adequate response quality with some gaps in information';
+    } else {
+        responseQuality = 'poor response quality with significant inaccuracies or missing information';
+    }
+    
+    if (toolScore >= 0.8) {
+        toolUsage = 'demonstrated excellent tool usage with proper parameter selection and effective integration';
+    } else if (toolScore >= 0.6) {
+        toolUsage = 'showed good tool usage with appropriate selections and mostly effective integration';
+    } else if (toolScore >= 0.4) {
+        toolUsage = 'exhibited adequate tool usage with some suboptimal choices or integration issues';
+    } else {
+        toolUsage = 'displayed poor tool usage with incorrect selections or failed integrations';
+    }
+    
+    const additionalComments = [
+        'The model followed instructions well and maintained context throughout the interaction.',
+        'Response formatting was clear and well-structured.',
+        'The model demonstrated good understanding of the task requirements.',
+        'Some minor issues with response coherence were observed.',
+        'The model showed creativity in problem-solving approaches.',
+        'Response time was within acceptable parameters.',
+        'The model handled edge cases appropriately.',
+        'The model provided detailed explanations for its reasoning.',
+        'Some inconsistencies in tool parameter selection were noted.',
+        'The model effectively utilized available context information.',
+        'Response quality varied slightly across different prompt variations.',
+        'The model demonstrated good error handling capabilities.'
+    ];
+    
+    const randomComment = additionalComments[Math.floor(Math.random() * additionalComments.length)];
+    
+    return `Run ${runNumber}: ${model} ${responseQuality} and ${toolUsage}. ${randomComment}`;
+}
+
+</script>
+</body>
+</html>

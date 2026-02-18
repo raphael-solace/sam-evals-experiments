@@ -1,0 +1,19 @@
+{
+  "test_case_id": "tc06_partial_inventory_split_sourcing",
+  "category": "Split Sourcing",
+  "description": "Inventory partially covers demand; should produce internal transfer plus external PO.",
+  "query": "Need 500 units of X-2847-PARTIAL for Paris facility under project PROJ-2026-PARTIAL budget 68000 EUR. Split sourcing is expected if only 200 are in stock.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved with split sourcing\n## Purchase Orders\nPO-\nPO-\n## Supplier\nInternal transfer and external supplier",
+    "criterion": "Evaluate whether split sourcing is correctly reasoned from partial stock, producing two PO outcomes (internal transfer and external purchase) with clear quantities."
+  }
+}

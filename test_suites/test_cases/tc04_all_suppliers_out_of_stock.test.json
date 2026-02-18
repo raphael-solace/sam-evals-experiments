@@ -1,0 +1,16 @@
+{
+  "test_case_id": "tc04_all_suppliers_out_of_stock",
+  "category": "Failure Handling",
+  "description": "All suppliers report out-of-stock; workflow should fail gracefully.",
+  "query": "Need 500 units of X-2847-ALL-OOS for Paris facility, project PROJ-2026-45 budget 75000 EUR, delivery in 3 weeks.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis"
+    ],
+    "expected_response": "## Decision\nCannot fulfill now\n## Purchase Orders\nNo PO created\n## Supplier\nOut of stock\n## Next Steps\nBackorder",
+    "criterion": "Evaluate whether the system reports supplier unavailability clearly, avoids fake PO creation, and suggests a practical backorder or retry path."
+  }
+}

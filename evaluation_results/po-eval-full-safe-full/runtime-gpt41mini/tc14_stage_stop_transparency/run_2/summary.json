@@ -1,0 +1,65 @@
+{
+    "test_case_id": "tc14_stage_stop_transparency",
+    "run_id": "run_2",
+    "query": "Need 500 units of X-2847-ALL-OOS for Paris under project PROJ-2026-45, budget 75000 EUR. Tell me exactly which stage blocks fulfillment.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-8639cbdda57741db83ee6695b1fccb0c",
+    "final_status": "completed",
+    "final_message": "## Decision\n\n**FULFILLMENT BLOCKED AT INVENTORY STAGE** \u2013 Component X-2847-ALL-OOS is completely out of stock (0 units on hand, 500-unit shortage). External sourcing is mandatory before procurement can proceed.\n\n---\n\n## Purchase Orders\n\n**Status:** PO creation is currently blocked pending supplier sourcing.\n\n---\n\n## Exact Stage Blocking Fulfillment\n\n**Stage 1: Inventory Check** \u274c **BLOCKS HERE**\n- Current stock: 0 units\n- Shortage: 500 units (100% of requirement)\n- External sourcing required\n\n**Stage 2: Supplier Sourcing** \u23f3 **PENDING**\n- Cannot proceed until supplier quotes obtained for 500 units\n- 30-day lead time noted from inventory system\n\n**Stage 3: Compliance Validation** \u23f3 **PENDING**\n- Awaiting supplier ID to validate procurement policies\n- Budget and project code are compliant\n\n**Stage 4: Budget & PO** \u2705 **READY**\n- Budget available: \u20ac75,000 \u2705\n- Cost center allocated: CC-PAR-4100 \u2705\n\n---\n\n## Compliance\n\nBudget compliance verified (\u20ac75,000 available). Supplier compliance validation is pending supplier identification.\n\n---\n\n## Next Steps\n\n1. **Immediate:** Delegate to Supplier Agent to source 500 units of X-2847-ALL-OOS with delivery to PARIS\n2. Once best-fit supplier quote is selected, re-run Compliance validation with supplier ID\n3. Finance Agent will create PO upon compliance clearance\n4. Estimated total lead time: 30 days from supplier confirmation\n\n**Would you like me to proceed with supplier sourcing now?**",
+    "start_time": "2026-02-18T22:10:40.216025",
+    "end_time": "2026-02-18T21:10:57.424666+00:00",
+    "duration_seconds": 17.208641,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_6VXaKwOXf3T2REWHWjsP7s",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-ALL-OOS, quantity needed: 500 units, facility: PARIS. Report current stock level and shortage quantity (if any). This is for project PROJ-2026-45."
+            },
+            "timestamp": "2026-02-18T21:10:44.730875+00:00"
+        },
+        {
+            "call_id": "tooluse_VahYLHDrw9qCN0JRiYHegP",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement policy compliance for the following request: Component X-2847-ALL-OOS, quantity 500 units, facility PARIS, project PROJ-2026-45, budget 75000 EUR. Identify any policy violations or compliance issues that would block fulfillment."
+            },
+            "timestamp": "2026-02-18T21:10:44.732917+00:00"
+        },
+        {
+            "call_id": "tooluse_3jeadlHBBWjQOqQt8mOkJh",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Check budget availability for project PROJ-2026-45 with allocated budget of 75000 EUR. Verify if budget is sufficient and available. Do not create PO yet; report budget status only."
+            },
+            "timestamp": "2026-02-18T21:10:44.735284+00:00"
+        },
+        {
+            "call_id": "tooluse_feP6efMEA9V8qOPTPobCJF",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-45",
+                "amount": 75000
+            },
+            "timestamp": "2026-02-18T21:10:47.709257+00:00"
+        },
+        {
+            "call_id": "tooluse_0OGcLSGBuMx84xaVGh5mD4",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-ALL-OOS",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T21:10:47.758838+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}
