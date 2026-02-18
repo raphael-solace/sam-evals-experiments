@@ -1,0 +1,90 @@
+{
+    "test_case_id": "tc02_sufficient_inventory_no_sourcing",
+    "run_id": "run_3",
+    "query": "Order 500 units of component X-2847-INSTOCK for Paris facility under project PROJ-2026-45 budget 75000 EUR. If inventory is sufficient, skip supplier sourcing and proceed directly.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-b0657892661f424fb414393ef5486fc8",
+    "final_status": "completed",
+    "final_message": "## Decision\n\u2705 **Procurement approved with conditions.** Inventory is sufficient (1,200 units available vs. 500 required). Finance Agent has successfully created an internal allocation PO with zero cost. However, Compliance Agent flagged that internal transfers require manual approval\u2014the INTERNAL_TRANSFER designation is not yet recognized in the approved vendor registry.\n\n## Purchase Orders\n**PO-65062865** created successfully for internal inventory allocation. 500 units of X-2847-INSTOCK allocated from Paris warehouse (PAR-WH-01) to project PROJ-2026-45. No external purchase required.\n\n## Supplier\nINTERNAL_TRANSFER (Paris Facility - PAR-WH-01). Internal warehouse allocation\u2014no external supplier involved.\n\n## Total Cost\n**\u20ac0.00** (Internal allocation carries no financial charge)\n\n## Delivery\n**2026-02-20** (2-day internal warehouse transfer)\n\n## Cost Center\n**CC-PAR-4100** (Paris facility cost center)\n\n## Compliance\n\u26a0\ufe0f **Approval Required.** Budget compliance verified (within \u20ac75,000 threshold), but the INTERNAL_TRANSFER supplier designation is not recognized in the approved vendor list. This is a procedural gap for internal allocations rather than a procurement risk.\n\n## Next Steps\n1. **Manual Approval Required:** Submit PO-65062865 to procurement management for manual authorization to clear the supplier registry violation.\n2. **Policy Update (Recommended):** Add INTERNAL_TRANSFER or reference the specific warehouse unit (PAR-WH-01) to the approved vendor registry to streamline future internal allocations.\n3. Once approved, PO-65062865 will proceed to warehouse execution for physical allocation on **2026-02-20**.",
+    "start_time": "2026-02-18T18:49:29.646624",
+    "end_time": "2026-02-18T17:49:59.087605+00:00",
+    "duration_seconds": 29.440981,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_jradUseDwios8z0y1W45cj",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-INSTOCK at Paris facility (PARIS). Required quantity: 500 units. Project: PROJ-2026-45. Report current stock level and shortage status (if any)."
+            },
+            "timestamp": "2026-02-18T17:49:32.243470+00:00"
+        },
+        {
+            "call_id": "tooluse_nYSZLXevBpV7M2GfIis2it",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-INSTOCK",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T17:49:36.601847+00:00"
+        },
+        {
+            "call_id": "tooluse_mUBULpssmCsitJfOaFNBqY",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for internal inventory allocation (no external supplier). Project: PROJ-2026-45, Component: X-2847-INSTOCK, Quantity: 500 units, Facility: PARIS, Budget: 75000 EUR. Verify budget and supplier policies for internal stock release."
+            },
+            "timestamp": "2026-02-18T17:49:44.211114+00:00"
+        },
+        {
+            "call_id": "tooluse_OcyJwBaqWvTCIUSTGeOytV",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Process internal allocation and create purchase order for 500 units of component X-2847-INSTOCK from Paris facility inventory (PAR-WH-01). Project: PROJ-2026-45, Budget: 75000 EUR. Component is already in stock - coordinate with warehouse for internal transfer/allocation. Determine cost-center allocation and generate PO."
+            },
+            "timestamp": "2026-02-18T17:49:44.212536+00:00"
+        },
+        {
+            "call_id": "tooluse_ortdgzBPATGc5M5Ms3hgAS",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-45",
+                "amount": 75000
+            },
+            "timestamp": "2026-02-18T17:49:46.158080+00:00"
+        },
+        {
+            "call_id": "tooluse_zWzNhtHJS00EmHB0eLCjaC",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "INTERNAL_TRANSFER",
+                "total_cost": 75000,
+                "project_code": "PROJ-2026-45",
+                "budget": 75000
+            },
+            "timestamp": "2026-02-18T17:49:47.211908+00:00"
+        },
+        {
+            "call_id": "tooluse_qfbH1hLbT4luHjo6tDGS2B",
+            "agent": "",
+            "tool_name": "create_purchase_order",
+            "arguments": {
+                "supplier_id": "INTERNAL_TRANSFER",
+                "component_id": "X-2847-INSTOCK",
+                "quantity": 500,
+                "price": 0,
+                "project_code": "PROJ-2026-45"
+            },
+            "timestamp": "2026-02-18T17:49:48.296610+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

@@ -1,0 +1,67 @@
+log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG
+  log_file: inventory_agent.log
+
+!include ../configs/shared_config.yaml
+
+apps:
+  - name: inventory_agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "InventoryAgent"
+      display_name: "SAP Inventory"
+      model: *planning_model
+
+      instruction: |
+        You check SAP inventory and decide whether external sourcing is required.
+        Always call `check_inventory_sap` exactly once per request.
+        Extract component_id and facility_code from the request.
+        Facility normalization rules:
+        - If request mentions "Paris", map to facility_code="PARIS".
+        - If facility code is missing or ambiguous, default facility_code="PARIS".
+        - Never ask follow-up questions for facility code in evaluation runs; proceed with best effort defaults.
+
+        Return a concise JSON-style summary that includes:
+        - component_id
+        - facility_code
+        - available_stock
+        - shortage_quantity
+        - requires_external_sourcing
+
+      tools:
+        - tool_type: python
+          component_module: "tools.sap_po_tools"
+          component_base_path: ${EXPERIMENT_ROOT}
+          function_name: "check_inventory_sap"
+          tool_name: "check_inventory_sap"
+
+      session_service: *default_session_service
+      artifact_service: *default_artifact_service
+      artifact_handling_mode: "reference"
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+
+      agent_card:
+        description: "Checks SAP inventory and reports shortage status for procurement decisions."
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text"]
+        skills:
+          - id: "check_inventory_sap"
+            name: "Check SAP Inventory"
+            description: "Retrieves available stock, location, and lead time for components."
+
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true
+      inter_agent_communication:
+        allow_list: ["OrchestratorAgent"]
+        deny_list: []
+        request_timeout_seconds: 120

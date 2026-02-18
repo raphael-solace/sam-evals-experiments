@@ -1,0 +1,57 @@
+{
+    "test_case_id": "tc14_stage_stop_transparency",
+    "run_id": "run_1",
+    "query": "Need 500 units of X-2847-ALL-OOS for Paris under project PROJ-2026-45, budget 75000 EUR. Tell me exactly which stage blocks fulfillment.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-b1986e4b8f4140569ef486829238085b",
+    "final_status": "completed",
+    "final_message": "---\n\n## Decision\n**Fulfillment blocked at supplier discovery stage.** All primary suppliers are out of stock for component X-2847-ALL-OOS. No viable quotes available to proceed.\n\n## Purchase Orders\n**Not created.** Cannot proceed to budget verification or PO generation without an available supplier quote within budget constraints.\n\n## Supplier\n**No viable supplier identified.** All three primary EU vendors (Alpha Components GmbH, Beta Industrial SAS, FastParts BV) are out of stock for the required 500-unit quantity.\n\n## Total Cost\n**Undefined.** No quotes obtained; budget of \u20ac75,000 EUR cannot be validated.\n\n## Delivery\n**Not achievable on standard timeline.** Even the best-performing supplier (FastParts BV) shows 18-day lead time but is out of stock.\n\n## Cost Center\n**Pending.** Allocation requires supplier selection and PO creation.\n\n## Compliance\n**Not evaluated.** Compliance stage cannot be reached without a viable supplier quote.\n\n## Next Steps\n\n**Stage 1 \u2192 **Escalation Required:\n1. **Contact suppliers directly** \u2013 Request expedited restocking or allocation from safety stock\n2. **Evaluate component substitution** \u2013 Confirm if engineering accepts an alternative component with equivalent specifications\n3. **Consider extended lead time** \u2013 If project timeline permits >30 days, document risk acceptance and resubmit request\n4. **Secondary sourcing** \u2013 Query non-primary vendors or regional distributors outside the standard network\n5. **Partial fulfillment** \u2013 Assess if phased delivery (e.g., 250 units now, 250 units in 30 days) meets project milestones\n\n**Critical Blocker:** Component X-2847-ALL-OOS exhibits supply constraints across primary EU distribution. Procurement cannot advance without one of the escalation actions above.",
+    "start_time": "2026-02-18T22:10:15.124577",
+    "end_time": "2026-02-18T21:10:39.446581+00:00",
+    "duration_seconds": 24.322004,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_s0D9K2BYAQSGA087p7IiGu",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-ALL-OOS. Required: 500 units for Paris facility (facility_code=\"PARIS\"). Project: PROJ-2026-45. Report current stock level and shortage quantity if any."
+            },
+            "timestamp": "2026-02-18T21:10:17.229533+00:00"
+        },
+        {
+            "call_id": "tooluse_K1zoMR0ut6uOtj6p0hIKhg",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-ALL-OOS",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T21:10:19.659327+00:00"
+        },
+        {
+            "call_id": "tooluse_a2VGQPLjXF8U6CDwSPllkU",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query multiple suppliers for 500 units of component X-2847-ALL-OOS. Project: PROJ-2026-45. Facility: PARIS. Budget: 75000 EUR. Required delivery to Paris. Standard request (no urgency constraint specified). Recommend best-fit supplier based on total cost, reliability, then delivery. Return quote details including unit price, total cost, delivery date, and supplier reliability rating."
+            },
+            "timestamp": "2026-02-18T21:10:25.357660+00:00"
+        },
+        {
+            "call_id": "tooluse_V3bqFf8Qqi88RIro1wif8J",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-ALL-OOS",
+                "quantity": 500,
+                "max_delivery_days": 30
+            },
+            "timestamp": "2026-02-18T21:10:27.745776+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

@@ -1,0 +1,55 @@
+{
+    "test_case_id": "tc05_compliance_unapproved_vendor",
+    "run_id": "run_2",
+    "query": "Need 500 units of X-2847-UNAPP for Paris facility, project PROJ-2026-UNAPP budget 82000 EUR, delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-8b45b8b3d6704eb9a59da664c98c82f4",
+    "final_status": "working",
+    "final_message": "",
+    "start_time": "2026-02-18T18:51:44.386276",
+    "end_time": "2026-02-18T17:51:55.716521+00:00",
+    "duration_seconds": 11.330245,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_GhHRize9ClQFx56F1kmPEw",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-UNAPP at Paris facility. Report current stock level and shortage quantity needed to fulfill 500 units. Provide inventory status for procurement decision."
+            },
+            "timestamp": "2026-02-18T17:51:47.387752+00:00"
+        },
+        {
+            "call_id": "tooluse_ymbRzeN31SiT43XKH7hOzV",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T17:51:49.220501+00:00"
+        },
+        {
+            "call_id": "tooluse_qdAemkrN4A3lWii8R901M7",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Source 500 units of component X-2847-UNAPP for Paris facility (PARIS). Project: PROJ-2026-UNAPP, Budget: 82000 EUR, Delivery target: 2 weeks. This is an urgent request. Prioritize delivery speed, then reliability, then cost. Query multiple suppliers and recommend best-fit quote with pricing, lead time, and reliability metrics."
+            },
+            "timestamp": "2026-02-18T17:51:55.715599+00:00"
+        },
+        {
+            "call_id": "tooluse_u8j83vdYzUAgAPGQDvDrH2",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate supplier and budget policy compliance for procurement request: Component X-2847-UNAPP, Quantity 500 units, Project PROJ-2026-UNAPP, Budget 82000 EUR, Facility PARIS, Delivery target 2 weeks. Check all applicable procurement policies and supplier compliance rules."
+            },
+            "timestamp": "2026-02-18T17:51:55.716521+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

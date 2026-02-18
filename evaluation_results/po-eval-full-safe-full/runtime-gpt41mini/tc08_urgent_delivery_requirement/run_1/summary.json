@@ -1,0 +1,110 @@
+{
+    "test_case_id": "tc08_urgent_delivery_requirement",
+    "run_id": "run_1",
+    "query": "Need 300 units of X-2847-URGENT for Paris facility, project PROJ-2026-URGENT budget 55000 EUR, delivery required in 5 days.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-a6a87cb48e9b43068d86430ccedcdf63",
+    "final_status": "completed",
+    "final_message": "## Decision\n\u2705 **APPROVED** \u2014 Urgent procurement request processed with expedited authorization. PO created with FastParts BV for 4-day expedited delivery.\n\n## Purchase Orders\n- **PO-89443253** | FastParts BV | 300 units X-2847-URGENT | \u20ac43,374 | Delivery 2026-02-22 (4 days)\n\n## Supplier\n**FastParts BV (SUP-EU-FAST)** \u2014 Only viable supplier meeting 5-day critical deadline. Highest reliability (96%), approved vendor, delivers 1 day ahead of deadline.\n\n## Total Cost\n\u20ac43,374 EUR (Budget: \u20ac55,000 | Remaining: \u20ac11,626)\n\n## Delivery\n**Expedited 4-day delivery** | Arrival: 2026-02-22 | Deadline: 2026-02-23 | **1-day safety buffer**\n\n## Cost Center\n**CC-PAR-4500** (PARIS facility) \u2014 Full cost allocation: \u20ac43,374\n\n## Compliance\n\u2705 **Approved** \u2014 All compliance checks cleared:\n- FastParts BV is approved vendor\n- Budget within authorization (78.8% utilization)\n- Emergency procurement authority confirmed\n- Project PROJ-2026-URGENT valid and funded\n\n## Next Steps\n1. **Immediate Action**: Confirm expedited fulfillment with FastParts BV; provide PARIS facility receiving details\n2. **Monitor**: Track delivery status daily; expect arrival 2026-02-22\n3. **Receiving**: Prepare PARIS warehouse for urgent intake of 300 units X-2847-URGENT\n4. **Documentation**: Retain PO-89443253 for audit trail; emergency procurement flag on file",
+    "start_time": "2026-02-18T21:59:23.477113",
+    "end_time": "2026-02-18T21:00:14.763763+00:00",
+    "duration_seconds": 51.28665,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_OnVxDNtuOWGHAEIFnNLbzu",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-URGENT at Paris facility (PARIS). Required quantity: 300 units. Delivery target: 5 days from 2026-02-18. Report current stock level, shortage quantity if any, and lead time implications for urgent delivery."
+            },
+            "timestamp": "2026-02-18T20:59:26.287489+00:00"
+        },
+        {
+            "call_id": "tooluse_Bq8ZKnLaER8rl63gVZVufe",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-URGENT",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T20:59:28.830276+00:00"
+        },
+        {
+            "call_id": "tooluse_OxXucLPbP8VskHfKqxyrNa",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "URGENT: Query multiple suppliers for 300 units of component X-2847-URGENT. Project: PROJ-2026-URGENT, Budget: 55000 EUR. Facility: PARIS. Delivery requirement: 5 days (critical deadline 2026-02-23). Prioritize delivery speed above cost and reliability. Request expedited shipping and emergency fulfillment options. Recommend best-fit supplier based on ability to meet 5-day delivery window."
+            },
+            "timestamp": "2026-02-18T20:59:35.848835+00:00"
+        },
+        {
+            "call_id": "tooluse_Qycigw87fpsFTzmKEcCy7y",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-URGENT",
+                "quantity": 300,
+                "max_delivery_days": 5
+            },
+            "timestamp": "2026-02-18T20:59:37.918781+00:00"
+        },
+        {
+            "call_id": "tooluse_VCYhpmdCNcg92MlNfe5mFv",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate compliance for urgent procurement request. Component: X-2847-URGENT, Quantity: 300 units, Supplier: FastParts BV (SUP-EU-FAST), Project: PROJ-2026-URGENT, Budget: 55000 EUR, Facility: PARIS. Verify: (1) FastParts BV is approved vendor, (2) emergency/expedited procurement policies allow 5-day delivery exceptions, (3) cost \u20ac43,374 complies with budget authorization, (4) project code PROJ-2026-URGENT is valid and funded."
+            },
+            "timestamp": "2026-02-18T20:59:48.047440+00:00"
+        },
+        {
+            "call_id": "tooluse_LTRZnlynE7YsbtyXKjfAgz",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-FAST",
+                "total_cost": 43374,
+                "project_code": "PROJ-2026-URGENT",
+                "budget": 55000
+            },
+            "timestamp": "2026-02-18T20:59:51.033320+00:00"
+        },
+        {
+            "call_id": "tooluse_X29iK35lUo2PtmQJtnmQfe",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Create Purchase Order for urgent procurement. Component: X-2847-URGENT, Quantity: 300 units, Supplier: FastParts BV (SUP-EU-FAST), Unit Price: \u20ac144.58, Total Cost: \u20ac43,374 EUR. Project Code: PROJ-2026-URGENT, Budget Allocation: \u20ac55,000 EUR. Facility: PARIS. Delivery: 4 days (expedited, deadline 2026-02-23). Allocate full cost of \u20ac43,374 to project cost center PROJ-2026-URGENT. Confirm budget availability and create PO with expedited delivery instructions."
+            },
+            "timestamp": "2026-02-18T20:59:58.061004+00:00"
+        },
+        {
+            "call_id": "tooluse_igUIPXIICdkIfdWYpYfY0e",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-URGENT",
+                "amount": 43374
+            },
+            "timestamp": "2026-02-18T21:00:00.923430+00:00"
+        },
+        {
+            "call_id": "tooluse_tEvXp2v1es9SmLrMi39WVH",
+            "agent": "",
+            "tool_name": "create_purchase_order",
+            "arguments": {
+                "supplier_id": "SUP-EU-FAST",
+                "component_id": "X-2847-URGENT",
+                "quantity": 300,
+                "price": 144.58,
+                "project_code": "PROJ-2026-URGENT"
+            },
+            "timestamp": "2026-02-18T21:00:05.313421+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

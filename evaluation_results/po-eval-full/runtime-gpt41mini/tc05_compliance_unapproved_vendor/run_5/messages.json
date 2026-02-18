@@ -1,0 +1,514 @@
+[
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/agent/request/OrchestratorAgent",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "method": "message/stream",
+            "params": {
+                "message": {
+                    "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                    "kind": "message",
+                    "messageId": "931c64abfda54289a4af21dbb0698c15",
+                    "metadata": {
+                        "agent_name": "OrchestratorAgent",
+                        "system_purpose": "The system is an AI Chatbot with agentic capabilities. It will use the agents available to provide information, reasoning and general assistance for the users in this system. **Always return useful artifacts and files that you create to the user.** Provide a status update before each tool call. Your external name is Agent Mesh.    \n",
+                        "response_format": "Responses should be clear, concise, and professionally toned.  Format responses to the user in Markdown using appropriate formatting.\n"
+                    },
+                    "parts": [
+                        {
+                            "kind": "text",
+                            "text": "Request received by gateway at: 2026-02-18T18:07:22.274561+00:00"
+                        },
+                        {
+                            "kind": "text",
+                            "text": "Need 500 units of X-2847-UNAPP for Paris facility, project PROJ-2026-UNAPP budget 82000 EUR, delivery in 2 weeks."
+                        }
+                    ],
+                    "role": "user"
+                }
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/agent/request/InventoryAgent",
+        "payload": {
+            "id": "a2a_subtask_816e7d744c4e41b58ee65261058708cc",
+            "jsonrpc": "2.0",
+            "method": "message/send",
+            "params": {
+                "message": {
+                    "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                    "kind": "message",
+                    "messageId": "9f8f106455374eb29e97f4a7a82fead4",
+                    "metadata": {
+                        "sessionBehavior": "RUN_BASED",
+                        "parentTaskId": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+                        "function_call_id": "tooluse_NEVIH7Mat7HeDuPOpQVI83",
+                        "agent_name": "InventoryAgent"
+                    },
+                    "parts": [
+                        {
+                            "kind": "text",
+                            "text": "You are part of a multi-agent AI platform. The task below is being sent to you by agent 'OrchestratorAgent'. You must perform this task to the best of your abilities. All artifacts that you create will automatically be returned to the calling agent, but you must provide context and description for which artifacts are important and how they should be used. Note that the calling agent will not see any of your history - only the text that you respond with.\n\nNote that if the request has not provided the information you need to do your job, you must ask for it. You must not 'make up' data unless specifically instructed to do so.\n\nNow please execute this task that was given to you:\n\nCheck SAP inventory for component X-2847-UNAPP at Paris facility (PARIS). Required quantity: 500 units. Report current stock level and shortage quantity if any. Project: PROJ-2026-UNAPP, Budget: 82000 EUR, Delivery target: 2 weeks (delivery date approximately 2026-03-04)."
+                        }
+                    ],
+                    "role": "user"
+                }
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "metadata": {
+                    "agent_name": "OrchestratorAgent"
+                },
+                "status": {
+                    "message": {
+                        "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                        "kind": "message",
+                        "messageId": "c1b0665ce5ca4c69abccb0164f7da78e",
+                        "parts": [
+                            {
+                                "data": {
+                                    "type": "tool_invocation_start",
+                                    "tool_name": "peer_InventoryAgent",
+                                    "tool_args": {
+                                        "task_description": "Check SAP inventory for component X-2847-UNAPP at Paris facility (PARIS). Required quantity: 500 units. Report current stock level and shortage quantity if any. Project: PROJ-2026-UNAPP, Budget: 82000 EUR, Delivery target: 2 weeks (delivery date approximately 2026-03-04)."
+                                    },
+                                    "function_call_id": "tooluse_NEVIH7Mat7HeDuPOpQVI83",
+                                    "parallel_group_id": null
+                                },
+                                "kind": "data"
+                            }
+                        ],
+                        "role": "agent",
+                        "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:07:26.075724+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "status": {
+                    "message": {
+                        "kind": "message",
+                        "messageId": "9ba58a4763d341819f832f0ee59257c6",
+                        "metadata": {
+                            "agent_name": "OrchestratorAgent",
+                            "forwarded_from_peer": "InventoryAgent",
+                            "original_peer_event_taskId": "a2a_subtask_816e7d744c4e41b58ee65261058708cc",
+                            "original_peer_event_timestamp": "2026-02-18T18:07:54.409357+00:00",
+                            "function_call_id": "tooluse_NEVIH7Mat7HeDuPOpQVI83"
+                        },
+                        "parts": [
+                            {
+                                "data": {
+                                    "type": "tool_invocation_start",
+                                    "tool_name": "check_inventory_sap",
+                                    "tool_args": {
+                                        "component_id": "X-2847-UNAPP",
+                                        "facility_code": "PARIS"
+                                    },
+                                    "function_call_id": "tooluse_6kflGhDTG57eUeVsVWctV2",
+                                    "parallel_group_id": null
+                                },
+                                "kind": "data"
+                            }
+                        ],
+                        "role": "agent"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:07:54.409357+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "status": {
+                    "message": {
+                        "kind": "message",
+                        "messageId": "3bfc7fdd6e444627a87d68ac1a3d8a5a",
+                        "metadata": {
+                            "agent_name": "OrchestratorAgent",
+                            "forwarded_from_peer": "InventoryAgent",
+                            "original_peer_event_taskId": "a2a_subtask_816e7d744c4e41b58ee65261058708cc",
+                            "original_peer_event_timestamp": "2026-02-18T18:07:54.409691+00:00",
+                            "function_call_id": "tooluse_NEVIH7Mat7HeDuPOpQVI83"
+                        },
+                        "parts": [
+                            {
+                                "data": {
+                                    "type": "tool_result",
+                                    "tool_name": "check_inventory_sap",
+                                    "result_data": {
+                                        "component_id": "X-2847-UNAPP",
+                                        "facility_code": "PARIS",
+                                        "available_stock": 0,
+                                        "lead_time_days": 20,
+                                        "location": "PAR-WH-03",
+                                        "reference_order_quantity": 500,
+                                        "requires_external_sourcing": true,
+                                        "shortage_quantity": 500,
+                                        "checked_at": "2026-02-18T18:07:54Z",
+                                        "error": null
+                                    },
+                                    "function_call_id": "tooluse_6kflGhDTG57eUeVsVWctV2",
+                                    "llm_usage": null
+                                },
+                                "kind": "data"
+                            }
+                        ],
+                        "role": "agent"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:07:54.409691+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "metadata": {
+                    "agent_name": "OrchestratorAgent"
+                },
+                "status": {
+                    "message": {
+                        "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                        "kind": "message",
+                        "messageId": "a20382a573264e0ab27a3b0803b04829",
+                        "parts": [
+                            {
+                                "data": {
+                                    "type": "tool_result",
+                                    "tool_name": "peer_InventoryAgent",
+                                    "result_data": {
+                                        "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                                        "id": "a2a_subtask_816e7d744c4e41b58ee65261058708cc",
+                                        "kind": "task",
+                                        "metadata": {
+                                            "agent_name": "InventoryAgent",
+                                            "token_usage": {
+                                                "total_input_tokens": 14369,
+                                                "total_output_tokens": 431,
+                                                "total_cached_input_tokens": 0,
+                                                "total_tokens": 14800,
+                                                "by_model": {
+                                                    "openai/bedrock-claude-4-5-haiku": {
+                                                        "input_tokens": 14369,
+                                                        "output_tokens": 431,
+                                                        "cached_input_tokens": 0
+                                                    }
+                                                },
+                                                "by_source": {
+                                                    "agent": {
+                                                        "input_tokens": 14369,
+                                                        "output_tokens": 431,
+                                                        "cached_input_tokens": 0
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "status": {
+                                            "message": {
+                                                "kind": "message",
+                                                "messageId": "a0e67be16538492eb62715b20f1db403",
+                                                "parts": [
+                                                    {
+                                                        "kind": "text",
+                                                        "text": "## Inventory Status Report\n\n**Component:** X-2847-UNAPP  \n**Facility:** PARIS (Location: PAR-WH-03)  \n**Required Quantity:** 500 units  \n**Checked at:** 2026-02-18 18:07:54 UTC\n\n| Metric | Value |\n|--------|-------|\n| Available Stock | 0 units |\n| Shortage Quantity | 500 units |\n| Requires External Sourcing | Yes |\n| Lead Time | 20 days |\n| Reference Order Quantity | 500 units |\n\n### Key Findings:\n- **Critical Shortage:** Zero inventory available at Paris facility. Full shortage of 500 units.\n- **External Sourcing Required:** YES - Immediate procurement action needed.\n- **Lead Time Risk:** External supplier lead time is 20 days, but delivery target is approximately 2026-03-04 (14 days from check date). This creates a **6-day delivery gap**.\n- **Project Impact:** PROJ-2026-UNAPP with 82,000 EUR budget and 2-week delivery target is at risk.\n\n### Recommendation:\nContact external suppliers immediately to meet the aggressive 2-week delivery deadline. The 20-day supplier lead time exceeds the required delivery window by 6 days. Consider expedited shipping or alternative suppliers to close"
+                                                    }
+                                                ],
+                                                "role": "agent"
+                                            },
+                                            "state": "completed",
+                                            "timestamp": "2026-02-18T18:07:58.576281+00:00"
+                                        }
+                                    },
+                                    "function_call_id": "tooluse_NEVIH7Mat7HeDuPOpQVI83",
+                                    "llm_usage": null
+                                },
+                                "kind": "data"
+                            }
+                        ],
+                        "role": "agent",
+                        "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:07:58.583513+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "metadata": {
+                    "agent_name": "OrchestratorAgent"
+                },
+                "status": {
+                    "message": {
+                        "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                        "kind": "message",
+                        "messageId": "79ed16172b2d43b09044581e9eae5faf",
+                        "parts": [
+                            {
+                                "kind": "text",
+                                "text": "\n\n"
+                            }
+                        ],
+                        "role": "agent",
+                        "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:08:00.397052+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/agent/request/SupplierAgent",
+        "payload": {
+            "id": "a2a_subtask_f4349da70ab74939b4b7f5026b33f56c",
+            "jsonrpc": "2.0",
+            "method": "message/send",
+            "params": {
+                "message": {
+                    "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                    "kind": "message",
+                    "messageId": "9496262d50ad4813b2a831ee74276c63",
+                    "metadata": {
+                        "sessionBehavior": "RUN_BASED",
+                        "parentTaskId": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+                        "function_call_id": "tooluse_iCIbezkXZAybHibRgUHd30",
+                        "agent_name": "SupplierAgent"
+                    },
+                    "parts": [
+                        {
+                            "kind": "text",
+                            "text": "You are part of a multi-agent AI platform. The task below is being sent to you by agent 'OrchestratorAgent'. You must perform this task to the best of your abilities. All artifacts that you create will automatically be returned to the calling agent, but you must provide context and description for which artifacts are important and how they should be used. Note that the calling agent will not see any of your history - only the text that you respond with.\n\nNote that if the request has not provided the information you need to do your job, you must ask for it. You must not 'make up' data unless specifically instructed to do so.\n\nNow please execute this task that was given to you:\n\nFind suppliers for component X-2847-UNAPP. Required quantity: 500 units. Delivery target: 2 weeks (approximately 2026-03-04). This is an URGENT request (\u22647 days is standard baseline; current deadline is 2 weeks but inventory lead time is 20 days, creating urgency). Prioritize delivery speed first, then reliability, then cost. Budget: 82000 EUR. Facility: PARIS. Project: PROJ-2026-UNAPP. Recommend best-fit supplier quote considering expedited/standard shipping options."
+                        }
+                    ],
+                    "role": "user"
+                }
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "metadata": {
+                    "agent_name": "OrchestratorAgent"
+                },
+                "status": {
+                    "message": {
+                        "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                        "kind": "message",
+                        "messageId": "8e6617adca7f40cba51e459eb49703f8",
+                        "parts": [
+                            {
+                                "data": {
+                                    "type": "tool_invocation_start",
+                                    "tool_name": "peer_SupplierAgent",
+                                    "tool_args": {
+                                        "task_description": "Find suppliers for component X-2847-UNAPP. Required quantity: 500 units. Delivery target: 2 weeks (approximately 2026-03-04). This is an URGENT request (\u22647 days is standard baseline; current deadline is 2 weeks but inventory lead time is 20 days, creating urgency). Prioritize delivery speed first, then reliability, then cost. Budget: 82000 EUR. Facility: PARIS. Project: PROJ-2026-UNAPP. Recommend best-fit supplier quote considering expedited/standard shipping options."
+                                    },
+                                    "function_call_id": "tooluse_iCIbezkXZAybHibRgUHd30",
+                                    "parallel_group_id": null
+                                },
+                                "kind": "data"
+                            }
+                        ],
+                        "role": "agent",
+                        "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:08:02.169574+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "status": {
+                    "message": {
+                        "kind": "message",
+                        "messageId": "fd99a1fe11f4427e849b30b605996fde",
+                        "metadata": {
+                            "agent_name": "OrchestratorAgent",
+                            "forwarded_from_peer": "SupplierAgent",
+                            "original_peer_event_taskId": "a2a_subtask_f4349da70ab74939b4b7f5026b33f56c",
+                            "original_peer_event_timestamp": "2026-02-18T18:08:04.320871+00:00",
+                            "function_call_id": "tooluse_iCIbezkXZAybHibRgUHd30"
+                        },
+                        "parts": [
+                            {
+                                "data": {
+                                    "type": "tool_invocation_start",
+                                    "tool_name": "query_supplier_apis",
+                                    "tool_args": {
+                                        "component_id": "X-2847-UNAPP",
+                                        "quantity": 500,
+                                        "max_delivery_days": 14
+                                    },
+                                    "function_call_id": "tooluse_QXFtRnmodXq019vac3Cbcx",
+                                    "parallel_group_id": null
+                                },
+                                "kind": "data"
+                            }
+                        ],
+                        "role": "agent"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:08:04.320871+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    },
+    {
+        "topic": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/a2a/v1/gateway/status/a2a_eval_backend_app/gdk-task-33bdb573c60143b5b14804a680a581bb",
+        "payload": {
+            "id": "gdk-task-33bdb573c60143b5b14804a680a581bb",
+            "jsonrpc": "2.0",
+            "result": {
+                "contextId": "rest-session-35b932b29f774f1eabb3ba07fc1301c9",
+                "final": false,
+                "kind": "status-update",
+                "status": {
+                    "message": {
+                        "kind": "message",
+                        "messageId": "0ab156f0ce09427daa34806e719caeb4",
+                        "metadata": {
+                            "agent_name": "OrchestratorAgent",
+                            "forwarded_from_peer": "SupplierAgent",
+                            "original_peer_event_taskId": "a2a_subtask_f4349da70ab74939b4b7f5026b33f56c",
+                            "original_peer_event_timestamp": "2026-02-18T18:08:04.513472+00:00",
+                            "function_call_id": "tooluse_iCIbezkXZAybHibRgUHd30"
+                        },
+                        "parts": [
+                            {
+                                "data": {
+                                    "type": "tool_result",
+                                    "tool_name": "query_supplier_apis",
+                                    "result_data": {
+                                        "component_id": "X-2847-UNAPP",
+                                        "quantity": 500,
+                                        "max_delivery_days": 14,
+                                        "quotes": [
+                                            {
+                                                "supplier_id": "SUP-UNAPPROVED",
+                                                "supplier_name": "Discount Rapid Export Ltd",
+                                                "available": true,
+                                                "out_of_stock": false,
+                                                "unit_price": 97.43,
+                                                "total_price": 48715.0,
+                                                "delivery_days": 11,
+                                                "within_deadline": true,
+                                                "reliability_score": 0.84,
+                                                "approved_vendor": false
+                                            },
+                                            {
+                                                "supplier_id": "SUP-EU-ALPHA",
+                                                "supplier_name": "Alpha Components GmbH",
+                                                "available": true,
+                                                "out_of_stock": false,
+                                                "unit_price": 123.07,
+                                                "total_price": 61535.0,
+                                                "delivery_days": 13,
+                                                "within_deadline": true,
+                                                "reliability_score": 0.94,
+                                                "approved_vendor": true
+                                            },
+                                            {
+                                                "supplier_id": "SUP-EU-BETA",
+                                                "supplier_name": "Beta Industrial SAS",
+                                                "available": true,
+                                                "out_of_stock": false,
+                                                "unit_price": 127.32,
+                                                "total_price": 63660.0,
+                                                "delivery_days": 15,
+                                                "within_deadline": false,
+                                                "reliability_score": 0.91,
+                                                "approved_vendor": true
+                                            }
+                                        ],
+                                        "timeouts": [],
+                                        "parallel_elapsed_ms": 192,
+                                        "sequential_estimate_ms": 490,
+                                        "recommended_supplier_id": "SUP-UNAPPROVED",
+                                        "error": null
+                                    },
+                                    "function_call_id": "tooluse_QXFtRnmodXq019vac3Cbcx",
+                                    "llm_usage": null
+                                },
+                                "kind": "data"
+                            }
+                        ],
+                        "role": "agent"
+                    },
+                    "state": "working",
+                    "timestamp": "2026-02-18T18:08:04.513472+00:00"
+                },
+                "taskId": "gdk-task-33bdb573c60143b5b14804a680a581bb"
+            }
+        }
+    }
+]

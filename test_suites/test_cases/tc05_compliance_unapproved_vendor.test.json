@@ -1,0 +1,17 @@
+{
+  "test_case_id": "tc05_compliance_unapproved_vendor",
+  "category": "Compliance Failure",
+  "description": "Cheapest supplier is not approved and should be rejected.",
+  "query": "Need 500 units of X-2847-UNAPP for Paris facility, project PROJ-2026-UNAPP budget 82000 EUR, delivery in 2 weeks.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules"
+    ],
+    "expected_response": "## Decision\nRejected by compliance\n## Purchase Orders\nNo PO created\n## Supplier\nUnapproved vendor\n## Compliance\nViolation",
+    "criterion": "Evaluate whether unapproved-vendor detection is explicit, alternatives are suggested, and automatic PO creation is stopped."
+  }
+}

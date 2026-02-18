@@ -1,0 +1,97 @@
+{
+    "test_case_id": "tc06_partial_inventory_split_sourcing",
+    "run_id": "run_1",
+    "query": "Need 500 units of X-2847-PARTIAL for Paris facility under project PROJ-2026-PARTIAL budget 68000 EUR. Split sourcing is expected if only 200 are in stock.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-0da8e1af75bb40bfa9b38197929bf245",
+    "final_status": "completed",
+    "final_message": "## Decision\n**Procurement workflow progressed with critical compliance blocker identified.** Supplier Beta Industrial SAS has been selected on cost basis (\u20ac33,612.00 total, well under budget), but cannot proceed to PO creation until supplier approval is resolved.\n\n## Purchase Orders\n**Status:** \u26a0\ufe0f **NOT CREATED** \u2014 Blocked by compliance violation.\n\n**Reason:** The recommended supplier (Beta Industrial SAS / SUP-EU-BETA) requires vendor management approval before PO can be issued. Compliance agent flagged supplier absence from approved vendor list as critical blocker.\n\n## Supplier\n**Recommended:** Beta Industrial SAS (SUP-EU-BETA)\n- **Unit Price:** \u20ac112.04\n- **Lead Time:** 17 days\n- **Reliability Rating:** 0.90\n- **Status:** Subject to vendor approval\n\n**Alternative suppliers available:**\n- Alpha Components GmbH: \u20ac124.04/unit, 12 days, 0.94 reliability\n- FastParts BV: \u20ac128.14/unit, 9 days, 0.88 reliability\n\n## Total Cost\n**Recommended quote:** \u20ac33,612.00 (300 units @ \u20ac112.04 each)\n**Budget remaining:** \u20ac34,388.00 under allocation\n\n## Delivery\n**Delivery window:** 17 days to Paris facility (acceptable for standard timeline)\n\n## Cost Center\n**Allocation:** CC-PAR-4300 (Paris facility)\n**Budget confirmed:** 68,000 EUR available\n\n## Compliance\n**Status:** \u26a0\ufe0f **COMPLIANCE VIOLATION**\n- Supplier not on approved vendor list\n- Manual vendor registration required before PO issuance\n- Budget policy: \u2705 Compliant\n\n## Next Steps\n1. **Immediate:** Submit Beta Industrial SAS (SUP-EU-BETA) to vendor management for pre-approval\n2. **Required documentation:** Supplier registration details, certifications, banking info\n3. **Upon approval:** PO will be issued immediately with reserved budget (\u20ac33,612.00) and delivery to PARIS facility by March 6, 2026\n4. **Alternative:** If vendor approval delays procurement, FastParts BV offers 9-day delivery (higher cost \u20ac38,442.00) without compliance holds if already approved",
+    "start_time": "2026-02-18T21:56:31.904273",
+    "end_time": "2026-02-18T20:57:01.042215+00:00",
+    "duration_seconds": 29.137942,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_VnKh6o4T6Y9hUk243jVJiI",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-PARTIAL at Paris facility (PARIS). Need to determine current stock level and shortage quantity against requirement of 500 units. Report whether shortage exists and shortage_quantity for procurement decision."
+            },
+            "timestamp": "2026-02-18T20:56:34.659456+00:00"
+        },
+        {
+            "call_id": "tooluse_VUpp0XvJaMsTOaYwcW34s7",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-PARTIAL",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T20:56:36.965784+00:00"
+        },
+        {
+            "call_id": "tooluse_D8Ccp209QtCZkgqhZW14D7",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query suppliers for X-2847-PARTIAL component. Requirement: 300 units (shortage quantity to supplement 200 in stock). Project: PROJ-2026-PARTIAL, Budget: 68000 EUR, Facility: PARIS, Delivery target: Paris facility. This is a standard request (not urgent). Prioritize by total cost, then reliability, then delivery speed. Return best-fit supplier quote with pricing, lead time, and reliability rating."
+            },
+            "timestamp": "2026-02-18T20:56:44.316704+00:00"
+        },
+        {
+            "call_id": "tooluse_QEGfvwyMQh19SEBzXLnFeo",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement policy compliance for X-2847-PARTIAL purchase. Component ID: X-2847-PARTIAL, Quantity: 300 units (external sourcing), Project: PROJ-2026-PARTIAL, Budget: 68000 EUR, Facility: PARIS, Delivery target: Paris facility. Verify supplier eligibility, budget policy adherence, and any sourcing restrictions. Flag any compliance violations."
+            },
+            "timestamp": "2026-02-18T20:56:44.318086+00:00"
+        },
+        {
+            "call_id": "tooluse_zQA8Nvd348HvJixTRVidVi",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Check budget availability for component X-2847-PARTIAL purchase. Project: PROJ-2026-PARTIAL, Budget allocation: 68000 EUR, Quantity needed: 300 units (external sourcing), Facility: PARIS. Verify sufficient budget for procurement and prepare cost-center allocation. Do not create PO yet; wait for supplier selection confirmation."
+            },
+            "timestamp": "2026-02-18T20:56:44.318960+00:00"
+        },
+        {
+            "call_id": "tooluse_45PdQDD0jkFILBaZlqBfpd",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-PARTIAL",
+                "quantity": 300,
+                "max_delivery_days": 30
+            },
+            "timestamp": "2026-02-18T20:56:47.896984+00:00"
+        },
+        {
+            "call_id": "tooluse_5hB9kNjuHDOhW5bIEsbbzv",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "EXTERNAL_SOURCING",
+                "total_cost": 68000,
+                "project_code": "PROJ-2026-PARTIAL",
+                "budget": 68000
+            },
+            "timestamp": "2026-02-18T20:56:47.975668+00:00"
+        },
+        {
+            "call_id": "tooluse_gaaqe61RJzMYLo2wVLYb0m",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-PARTIAL",
+                "amount": 68000
+            },
+            "timestamp": "2026-02-18T20:56:48.709029+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

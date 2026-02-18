@@ -1,0 +1,19 @@
+{
+  "test_case_id": "tc10_parallel_supplier_performance",
+  "category": "Performance",
+  "description": "Supplier tool should expose measurable parallel execution benefit.",
+  "query": "Need 1500 units of X-2847-PERF for Paris facility under project PROJ-2026-PERF budget 120000 EUR with delivery in 30 days. Include supplier query performance data.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved\n## Supplier\nparallel_elapsed_ms\nsequential_estimate_ms\n## Purchase Orders\nPO-",
+    "criterion": "Evaluate whether the response includes evidence of parallel supplier querying (parallel vs sequential timing) and still completes full PO workflow."
+  }
+}

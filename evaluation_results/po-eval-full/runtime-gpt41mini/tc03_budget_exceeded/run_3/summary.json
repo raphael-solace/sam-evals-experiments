@@ -1,0 +1,87 @@
+{
+    "test_case_id": "tc03_budget_exceeded",
+    "run_id": "run_3",
+    "query": "Order 500 units of component X-2847 for Paris facility under project PROJ-2026-OVER with budget 12000 EUR and delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-d64f423c9abb42bea47a268e6fa01fa0",
+    "final_status": "completed",
+    "final_message": "## Decision\n**\u274c BLOCKED \u2014 Budget Authorization Required**\n\nProcurement cannot proceed without budget adjustment. The sourced component cost (\u20ac54,123.60) exceeds the allocated budget (\u20ac12,000 EUR) by \u20ac42,123.60 (351% overage).\n\n## Purchase Orders\n**No PO created.** Finance and PO generation halted pending budget resolution.\n\n## Supplier\n**SUP-EU-ALPHA (Alpha Components GmbH)**\n- Recommended based on urgent delivery requirement\n- Delivery: 12 days (meets 2-week deadline)\n- Reliability: 0.94 (highest among available options)\n\n## Total Cost\n**\u20ac54,123.60** (for 460-unit external procurement)\n- Budget allocated: \u20ac12,000 EUR\n- **Shortfall: \u20ac42,123.60**\n\n## Delivery\n**12 days** (arrives ~1 March 2026, meets 4 March 2026 target)\n\n## Cost Center\nPending budget authorization; cannot allocate to cost center without approved budget.\n\n## Compliance\n**\u274c FAILED** \u2014 Budget overage violation. Escalation required for executive/financial approval before PO generation.\n\n## Next Steps\n\n1. **Contact budget owner immediately** to request:\n   - Supplemental budget authorization of \u20ac42,123.60+, OR\n   - Alternative cost reduction strategy (reduce quantity, find lower-cost supplier, adjust delivery timeline)\n\n2. **Alternative options:**\n   - **Reduce scope:** Lower quantity target (e.g., 200 units instead of 500)\n   - **Extend delivery:** 17-day timeline unlocks SUP-EU-BETA at \u20ac52,016.80 (still over budget but \u20ac2,107 cheaper)\n   - **Hybrid approach:** Utilize 40 in-hand units + lower external quantity\n\n3. **Once budget approved:** Re-submit request with updated authorization. All supplier, compliance, and PO steps can proceed rapidly.\n\n**Request escalation to:** Procurement Manager / Finance Director / Project Sponsor (PROJ-2026-OVER)",
+    "start_time": "2026-02-18T18:50:11.812528",
+    "end_time": "2026-02-18T17:50:56.504758+00:00",
+    "duration_seconds": 44.69223,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_rEHIwhlGpIl6xQAeSp7K71",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847. Report current stock levels and shortage status. Context: Project PROJ-2026-OVER, Paris facility (PARIS), required quantity 500 units, budget 12000 EUR, delivery target 2 weeks from 2026-02-18."
+            },
+            "timestamp": "2026-02-18T17:50:15.548527+00:00"
+        },
+        {
+            "call_id": "tooluse_JMiQM0eI1zDXsidfaZSMxb",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T17:50:17.480116+00:00"
+        },
+        {
+            "call_id": "tooluse_mTcKyKDOBnPawY8UhDC6jU",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query suppliers for component X-2847. Required quantity: 460 units (shortage). Project: PROJ-2026-OVER, facility: PARIS. Budget: 12000 EUR. Delivery target: 2 weeks (4 March 2026). This is urgent request with tight delivery deadline. Prioritize delivery speed, then reliability, then cost. Return best-fit quote with supplier recommendation."
+            },
+            "timestamp": "2026-02-18T17:50:29.821591+00:00"
+        },
+        {
+            "call_id": "tooluse_pae7umF4puHioC2rSFcKPh",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for component X-2847 order. Project: PROJ-2026-OVER, facility: PARIS, quantity: 500 units, budget: 12000 EUR, delivery: 2 weeks. Verify supplier eligibility rules, budget policy compliance, and project authorization. Provide compliance status and any policy exceptions required."
+            },
+            "timestamp": "2026-02-18T17:50:29.823184+00:00"
+        },
+        {
+            "call_id": "tooluse_Frgb6LjsT1DutmbuCnNryC",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847",
+                "quantity": 460,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T17:50:31.847487+00:00"
+        },
+        {
+            "call_id": "tooluse_ZMz8mzzp1tNapWoGNAeyrC",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance. Project: PROJ-2026-OVER, facility: PARIS, component: X-2847, quantity: 500 units (40 in-hand + 460 external), budget: 12000 EUR, supplier: SUP-EU-ALPHA (Alpha Components GmbH), delivery: 2 weeks. Verify supplier eligibility, budget policy compliance (note: quote of \u20ac54,123.60 exceeds budget\u2014flag policy exceptions or escalation requirements), and project authorization."
+            },
+            "timestamp": "2026-02-18T17:50:43.044728+00:00"
+        },
+        {
+            "call_id": "tooluse_QZQiThPzaixoayYFK3yCRc",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "total_cost": 54123.6,
+                "project_code": "PROJ-2026-OVER",
+                "budget": 12000
+            },
+            "timestamp": "2026-02-18T17:50:45.323800+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

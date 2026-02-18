@@ -1,0 +1,79 @@
+{
+    "test_case_id": "tc05_compliance_unapproved_vendor",
+    "run_id": "run_4",
+    "query": "Need 500 units of X-2847-UNAPP for Paris facility, project PROJ-2026-UNAPP budget 82000 EUR, delivery in 2 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-73032f75882041739ecec761f4ebd702",
+    "final_status": "working",
+    "final_message": "",
+    "start_time": "2026-02-18T19:07:22.258781",
+    "end_time": "2026-02-18T18:08:06.919254+00:00",
+    "duration_seconds": 44.660473,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_qSWffWtxVJKBSQv5uNuL53",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-UNAPP at Paris facility (PARIS). We need 500 units for project PROJ-2026-UNAPP with delivery target in 2 weeks. Please report current stock level and any shortage quantity that requires procurement."
+            },
+            "timestamp": "2026-02-18T18:07:26.399603+00:00"
+        },
+        {
+            "call_id": "tooluse_muZHr5JFc6YO4FeXXja3Wl",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T18:07:56.891312+00:00"
+        },
+        {
+            "call_id": "tooluse_XsVVUcvt7jVLZYNqoniB8c",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Urgent supplier discovery for component X-2847-UNAPP. Required: 500 units for Paris facility (PARIS), project PROJ-2026-UNAPP, budget 82000 EUR. URGENT: Delivery must occur within 14 days (standard external lead time is 20 days). Prioritize delivery speed first, then reliability, then cost. Identify suppliers capable of expedited delivery and provide best-fit quote recommendations."
+            },
+            "timestamp": "2026-02-18T18:08:04.581114+00:00"
+        },
+        {
+            "call_id": "tooluse_lBayRkG2XYzY8XLVt4Fnm9",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-UNAPP",
+                "quantity": 500,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T18:08:06.727143+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [
+        {
+            "artifact_name": "supplier_analysis_X2847.md",
+            "directory": "/tmp/samv2/eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b/eval-user/rest-session-73032f75882041739ecec761f4ebd702/supplier_analysis_X2847.md",
+            "versions": [
+                {
+                    "version": "0",
+                    "metadata": {
+                        "filename": "supplier_analysis_X2847.md",
+                        "mime_type": "text/markdown",
+                        "size_bytes": 3028,
+                        "timestamp_utc": 1771438086.919836,
+                        "description": "Urgent supplier discovery analysis for component X-2847-UNAPP with expedited delivery requirements",
+                        "schema": {
+                            "type": "text/markdown",
+                            "inferred": false,
+                            "error": null
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "errors": []
+}

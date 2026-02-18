@@ -1,0 +1,119 @@
+{
+    "test_case_id": "tc12_missing_facility_defaulting",
+    "run_id": "run_2",
+    "query": "I need 500 units of component X-2847 for project PROJ-2026-45 with budget 75000 EUR and delivery in 3 weeks. Please proceed.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-8cf4fc38-b20a-4498-b348-2bfa4dcc65b0",
+    "context_id": "rest-session-8579d89029ee410882628e9cda5615c2",
+    "final_status": "completed",
+    "final_message": "## Decision\n\u2705 **Approved** \u2013 Purchase order created for shortage fulfillment. Combined inventory (40 units on-hand + 460 units PO) meets full 500-unit requirement.\n\n## Purchase Orders\n**PO-74190162** \u2013 460 units of component X-2847\n- Status: Created\n- Supplier: Alpha Components GmbH (SUP-EU-ALPHA)\n- Total: \u20ac54,123.60\n\n## Supplier\n**Alpha Components GmbH (SUP-EU-ALPHA)**\n- Delivery: 9 days (exceeds reliability with 0.94 score)\n- Lead time well within 3-week deadline\n\n## Total Cost\n\u20ac54,123.60 (external procurement) + \u20ac20,953.40 budget remaining = **\u20ac75,000 total project budget allocated**\n\n## Delivery\n- **Estimated Arrival:** 2026-02-25 (9 days from order date)\n- **Delivery Target:** 21 days \u2013 **On track with 12-day buffer**\n\n## Cost Center\n**CC-PAR-4100** (PARIS facility allocation)\n\n## Compliance\n\u2705 **All validation passed**\n- Supplier policies verified\n- Budget compliance: 72.2% utilization\n- No violations\n- No additional approvals required\n\n## Next Steps\n1. PO-74190162 transmitted to Alpha Components GmbH\n2. 40 existing units at PARIS will be released for project assembly\n3. Expected 500-unit full inventory by 2026-02-25\n4. Monitor delivery status against 21-day project deadline",
+    "start_time": "2026-02-18T22:08:14.730391",
+    "end_time": "2026-02-18T21:09:01.920278+00:00",
+    "duration_seconds": 47.189887,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_uPdQW3tZzlPncksn2cDeB6",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847. Report current stock level and shortage quantity if any. Required context: Component ID: X-2847, Requested quantity: 500 units, Project code: PROJ-2026-45, Facility: PARIS (default), Budget: 75000 EUR, Delivery target: 3 weeks."
+            },
+            "timestamp": "2026-02-18T21:08:17.432546+00:00"
+        },
+        {
+            "call_id": "tooluse_Gq21E97o0u4kGOlGeVqxda",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T21:08:20.023602+00:00"
+        },
+        {
+            "call_id": "tooluse_NBafanXwWygHSAiqTujztT",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "Query multiple suppliers for 460 units of component X-2847 (shortage quantity). Request urgent quotes prioritizing delivery speed (delivery target: 3 weeks / 21 days). Include: Component ID: X-2847, Quantity: 460 units, Project: PROJ-2026-45, Facility: PARIS, Budget: 75000 EUR, Delivery window: 3 weeks. Recommend best-fit supplier based on delivery speed first, then reliability, then cost."
+            },
+            "timestamp": "2026-02-18T21:08:27.944519+00:00"
+        },
+        {
+            "call_id": "tooluse_sdC8loSD1wFWbisJ4Um82V",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for component X-2847 purchase (460 units shortage). Verify supplier policies and budget compliance rules for project PROJ-2026-45 with budget allocation of 75000 EUR. Facility: PARIS. Confirm policy adherence before PO creation."
+            },
+            "timestamp": "2026-02-18T21:08:27.945731+00:00"
+        },
+        {
+            "call_id": "tooluse_zkYGokwM8Wccj9t5dc5Fke",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847",
+                "quantity": 460,
+                "max_delivery_days": 21
+            },
+            "timestamp": "2026-02-18T21:08:31.869806+00:00"
+        },
+        {
+            "call_id": "tooluse_5VR10IIy3szAVJyfjdvuNZ",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_ComplianceAgent",
+            "arguments": {
+                "task_description": "Validate procurement compliance for component X-2847 purchase (460 units). Supplier: Alpha Components GmbH (SUP-EU-ALPHA). Project: PROJ-2026-45, Budget: 75000 EUR, Total cost for purchase: 54123.60 EUR (9 days delivery from PARIS facility). Verify supplier policies, budget compliance, and procurement policies before PO creation."
+            },
+            "timestamp": "2026-02-18T21:08:40.886675+00:00"
+        },
+        {
+            "call_id": "tooluse_Bel5kzkuTzHwfMZeqwwSND",
+            "agent": "",
+            "tool_name": "validate_compliance_rules",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "total_cost": 54123.6,
+                "project_code": "PROJ-2026-45",
+                "budget": 75000
+            },
+            "timestamp": "2026-02-18T21:08:43.316758+00:00"
+        },
+        {
+            "call_id": "tooluse_rny9VEATIGJrb5bVjEmrof",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_FinanceAgent",
+            "arguments": {
+                "task_description": "Check budget availability and create purchase order for component X-2847. Details: Project code: PROJ-2026-45, Component: X-2847, Quantity: 460 units, Supplier: Alpha Components GmbH (SUP-EU-ALPHA), Total cost: 54123.60 EUR, Unit price: 117.66 EUR, Facility: PARIS, Delivery: 9 days, Budget available: 75000 EUR. Allocate cost center and create PO. Also note: 40 units are already in inventory at PARIS facility."
+            },
+            "timestamp": "2026-02-18T21:08:49.730877+00:00"
+        },
+        {
+            "call_id": "tooluse_hs13wiLZo00hhXFPWOxqT8",
+            "agent": "",
+            "tool_name": "check_budget_availability",
+            "arguments": {
+                "project_code": "PROJ-2026-45",
+                "amount": 54123.6
+            },
+            "timestamp": "2026-02-18T21:08:52.756268+00:00"
+        },
+        {
+            "call_id": "tooluse_sOv6FG9SoU7HtT7TnrGFgO",
+            "agent": "",
+            "tool_name": "create_purchase_order",
+            "arguments": {
+                "supplier_id": "SUP-EU-ALPHA",
+                "component_id": "X-2847",
+                "quantity": 460,
+                "price": 117.66,
+                "project_code": "PROJ-2026-45"
+            },
+            "timestamp": "2026-02-18T21:08:52.757003+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

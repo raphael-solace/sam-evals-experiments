@@ -1,0 +1,189 @@
+{
+    "model_name": "runtime-gpt41mini",
+    "total_execution_time": 145.93714213371277,
+    "test_cases": [
+        {
+            "test_case_id": "tc01_happy_path_supplier_sourcing",
+            "category": "Multi-Agent Workflow",
+            "runs": [
+                {
+                    "run": 2,
+                    "test_case_id": "tc01_happy_path_supplier_sourcing",
+                    "test_case_path": "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc01_happy_path_supplier_sourcing.test.json",
+                    "duration_seconds": 53.525501,
+                    "tool_match": 1.0,
+                    "response_match": 0.12022000902917376,
+                    "llm_eval": {
+                        "score": 0.85,
+                        "reasoning": "The actual response demonstrates strong performance across most lifecycle components with minor inconsistencies:\n\n**Strengths (Supporting High Score):**\n1. \u2705 **Inventory Shortage Detected**: Response identifies that 460 units were ordered (implying 40 existing units detected), totaling the requested 500 units\n2. \u2705 **Supplier Quotes Retrieved**: Alpha Components GmbH provided with specific unit price (\u20ac117.66/unit) and delivery timeline (12 days)\n3. \u2705 **Compliant Supplier Selected**: Pre-qualified vendor with 0.94 reliability score; authorization and policy compliance explicitly validated\n4. \u2705 **Budget Validated**: \u20ac54,123.60 cost against \u20ac75,000 budget (72.2% utilization) with buffer calculation shown\n5. \u2705 **PO Number Issued**: PO-74190162 clearly provided with status tracking\n6. \u2705 **Delivery Estimate**: 2026-03-01 with 9-day buffer against 3-week requirement\n7. \u2705 **Cost Center Assigned**: CC-PAR-4100 properly mapped to Paris facility\n8. \u2705 **Comprehensive Format**: Response exceeds expected template with actionable next steps and detailed compliance verification\n\n**Minor Issues (Preventing Perfect Score):**\n1. **Quantity Discrepancy**: Order for 500 units resulted in only 460 units ordered (40-unit shortfall). While this may reflect supplier availability constraints, it wasn't explicitly justified or flagged as a deviation from the original request\n2. **Expected Response Format Not Followed**: The expected response showed a simplified table format, while the actual response provided enhanced detail. While this adds value, it technically diverges from the specified template\n3. **Implicit Assumptions**: The response assumes inventory buffers (40 existing units) without explicitly stating where this information was sourced\n\n**Overall Assessment**: The response successfully completes the full procurement lifecycle with professional detail, compliance verification, and risk mitigation. The primary concern is the unexplained 40-unit order reduction, which should have been flagged as a variance requiring clarification or approval."
+                    }
+                },
+                {
+                    "run": 1,
+                    "test_case_id": "tc01_happy_path_supplier_sourcing",
+                    "test_case_path": "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc01_happy_path_supplier_sourcing.test.json",
+                    "duration_seconds": 48.809698,
+                    "tool_match": 1.0,
+                    "response_match": 0.12813880942761816,
+                    "llm_eval": {
+                        "score": 0.92,
+                        "reasoning": "The actual response demonstrates excellent execution across the full procurement lifecycle criterion:\n\n**Strengths:**\n\n1. **Inventory Shortage Detection** \u2705 - The response implies shortage recognition by proceeding with urgent procurement for 500 units with a 3-week delivery requirement.\n\n2. **Supplier Quotes Retrieved** \u2705 - Alpha Components GmbH is presented as a selected supplier with detailed metrics (Reliability Score: 0.94, delivery in 12 days, cost \u20ac61,820).\n\n3. **Compliant Supplier Selected** \u2705 - Explicit compliance validation shown with checkmarks, supplier eligibility confirmed, and reasoning provided (optimal balance of speed, reliability, and cost).\n\n4. **Budget Validated** \u2705 - Budget compliance clearly verified: \u20ac61,820 is within \u20ac75,000 threshold, with detailed cost center tracking (CC-PAR-4100) and 82.4% utilization rate calculated.\n\n5. **PO Number Issued** \u2705 - PO-41443107 is generated with full details (quantity, cost, status as \"Created & Financially Approved\").\n\n6. **Delivery Estimate Provided** \u2705 - Specific delivery date of February 25, 2026 (12 calendar days) confirmed for Paris facility.\n\n7. **Cost Center Assignment** \u2705 - Properly allocated to CC-PAR-4100 with budget reconciliation.\n\n**Minor Deviations from Expected Format:**\n- The expected response template shows minimal structure, while the actual response provides comprehensive detail. This is an enhancement rather than a deficiency.\n- The expected format lists \"PO-\" incomplete, whereas actual response provides complete PO-41443107.\n\n**Small Gap:**\n- No explicit mention of multiple supplier quotes comparison (though \"highest qualified supplier\" implies comparison occurred), though context suggests this occurred in the selection process.\n\nThe response fully satisfies all lifecycle requirements with excellent documentation and actionable next steps."
+                    }
+                }
+            ],
+            "average_duration": 51.167599499999994,
+            "tool_match_scores": {
+                "average": 1.0,
+                "distribution": {
+                    "min": 1.0,
+                    "q1": 1.0,
+                    "q2": 1.0,
+                    "q3": 1.0,
+                    "max": 1.0
+                }
+            },
+            "response_match_scores": {
+                "average": 0.12417940922839596,
+                "distribution": {
+                    "min": 0.12022000902917376,
+                    "q1": 0.12219970912878486,
+                    "q2": 0.12417940922839596,
+                    "q3": 0.12615910932800706,
+                    "max": 0.12813880942761816
+                }
+            },
+            "llm_eval_scores": {
+                "average": 0.885,
+                "distribution": {
+                    "min": 0.85,
+                    "q1": 0.8674999999999999,
+                    "q2": 0.885,
+                    "q3": 0.9025000000000001,
+                    "max": 0.92
+                }
+            }
+        },
+        {
+            "test_case_id": "tc02_sufficient_inventory_no_sourcing",
+            "category": "Conditional Flow",
+            "runs": [
+                {
+                    "run": 1,
+                    "test_case_id": "tc02_sufficient_inventory_no_sourcing",
+                    "test_case_path": "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc02_sufficient_inventory_no_sourcing.test.json",
+                    "duration_seconds": 30.43259,
+                    "tool_match": 1.0,
+                    "response_match": 0.15380962481076474,
+                    "llm_eval": {
+                        "score": 0.72,
+                        "reasoning": "The actual response demonstrates several strengths and weaknesses against the stated criterion:\n\n**Strengths:**\n1. **Correctly skips external supplier sourcing** - The system confirmed internal stock availability (1,200 units) and appropriately bypassed supplier querying, which is the core requirement\n2. **Generates compliant fulfillment decision** - Creates PO-65062865 with proper documentation and internal transfer allocation\n3. **Budget validation** - Confirms zero external cost against the EUR 75,000 budget\n4. **Accurate inventory confirmation** - Verifies 500 units are available from PARIS facility stock\n5. **Structured output** - Provides clear information on delivery, cost center (CC-PAR-4100), and timeline\n\n**Weaknesses:**\n1. **Introduces unnecessary compliance friction** - Flags INTERNAL_TRANSFER as \"not on approved vendor list\" despite this being an internal operation. This creates a procedural barrier that undermines the efficiency intent of the \"skip supplier sourcing\" instruction\n2. **Deviates from expected response format** - The expected response shows a simpler approval structure (\"## Decision: Approved\"), while the actual response adds complexity with compliance warnings that may not be necessary for legitimate internal transfers\n3. **Delays finality** - Requires additional manual procurement authority approval before execution, which contradicts the directive to \"proceed directly\" when inventory is sufficient\n4. **Compliance flag is arguably misplaced** - Internal inventory transfers should typically have pre-established approval pathways that don't require treating them like external vendors\n\n**Assessment:**\nThe response successfully accomplishes the primary objective (skip sourcing, fulfill from stock) and maintains budget/compliance awareness. However, it introduces a secondary compliance gate that seems overly bureaucratic for an internal operation, potentially contradicting the efficiency intent. The actual behavior is \"adequate to good\" - it works but adds unnecessary friction that a truly optimized system might avoid through better configuration of internal transfer procedures.\n\nThe response is functional and safe, but not optimally streamlined per the criterion's expectations."
+                    }
+                },
+                {
+                    "run": 2,
+                    "test_case_id": "tc02_sufficient_inventory_no_sourcing",
+                    "test_case_path": "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc02_sufficient_inventory_no_sourcing.test.json",
+                    "duration_seconds": 29.901136,
+                    "tool_match": 1.0,
+                    "response_match": 0.1450729499317727,
+                    "llm_eval": {
+                        "score": 0.75,
+                        "reasoning": "The actual response demonstrates several strengths and notable weaknesses against the stated criterion:\n\n**Strengths:**\n1. **Supplier sourcing successfully skipped** \u2014 The response correctly identifies sufficient inventory (1,200 units vs. 500 required) and explicitly states \"Supplier sourcing **skipped as requested**,\" fulfilling the primary workflow requirement.\n2. **Budget validation completed** \u2014 The \u20ac75,000 budget is properly validated and approved under project PROJ-2026-45.\n3. **Inventory check passed** \u2014 Quantitative confirmation of stock availability is clearly documented.\n4. **PO generated** \u2014 A valid internal transfer PO (PO-81785364) is created with appropriate cost allocation.\n5. **Delivery timeline provided** \u2014 Estimated 2-day delivery is realistic for internal transfers.\n\n**Weaknesses:**\n1. **Compliance friction undermines the directive** \u2014 While the response acknowledges the user's request to \"skip supplier sourcing,\" it introduces an unexpected compliance exception requiring \"manual approval from procurement leadership.\" This creates operational friction that contradicts the user's explicit instruction to \"proceed directly.\"\n2. **Ambiguous authority** \u2014 The response doesn't clarify whether the user has authority to bypass compliance requirements. If they do, the exception should not be raised; if they don't, the initial instruction was inappropriate to honor.\n3. **Mixed compliance messaging** \u2014 The response both approves the action (creates the PO) and blocks it (requires manual override), creating process ambiguity about the actual status.\n4. **Expected response template not fully matched** \u2014 The expected template is simpler and more decisive; the actual response adds complexity that may not align with what an automated fulfillment system should deliver.\n\n**Assessment:**\nThe response *functionally* meets the criterion by skipping external sourcing when inventory is sufficient and providing compliant budget validation. However, it introduces unnecessary procedural friction through the compliance exception, which may indicate either incomplete requirement understanding or legitimate policy concerns not addressed in the original query."
+                    }
+                }
+            ],
+            "average_duration": 30.166863,
+            "tool_match_scores": {
+                "average": 1.0,
+                "distribution": {
+                    "min": 1.0,
+                    "q1": 1.0,
+                    "q2": 1.0,
+                    "q3": 1.0,
+                    "max": 1.0
+                }
+            },
+            "response_match_scores": {
+                "average": 0.14944128737126872,
+                "distribution": {
+                    "min": 0.1450729499317727,
+                    "q1": 0.1472571186515207,
+                    "q2": 0.14944128737126872,
+                    "q3": 0.15162545609101674,
+                    "max": 0.15380962481076474
+                }
+            },
+            "llm_eval_scores": {
+                "average": 0.735,
+                "distribution": {
+                    "min": 0.72,
+                    "q1": 0.7275,
+                    "q2": 0.735,
+                    "q3": 0.7424999999999999,
+                    "max": 0.75
+                }
+            }
+        },
+        {
+            "test_case_id": "tc03_budget_exceeded",
+            "category": "Policy Enforcement",
+            "runs": [
+                {
+                    "run": 1,
+                    "test_case_id": "tc03_budget_exceeded",
+                    "test_case_path": "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc03_budget_exceeded.test.json",
+                    "duration_seconds": 53.524689,
+                    "tool_match": 1.0,
+                    "response_match": 0.08297312363709627,
+                    "llm_eval": {
+                        "score": 0.92,
+                        "reasoning": "The actual response demonstrates excellent adherence to the evaluation criterion with only minor deviations from expectations.\n\n**Strengths:**\n\n1. **Correct Decision Blocking:** The system properly identifies and blocks PO creation, explicitly stating \"\u274c NOT CREATED\" with clear reasoning tied to budget insufficiency (\u20ac12,000 allocated vs. \u20ac54,123.60 required).\n\n2. **Budget Variance Identification:** The response accurately calculates and communicates the budget shortfall (\u20ac42,123.60 / +352% variance), making the financial constraint unambiguous.\n\n3. **Escalation Pathway:** Provides specific escalation guidance with identified authority (\"Finance Director\") and required actions (budget variance approval before PO auto-generation).\n\n4. **Compliance with Criterion:** The system does NOT create an approved PO despite having supplier and delivery information\u2014this is the core requirement and is fully satisfied.\n\n5. **Comprehensive Context:** Beyond the criterion minimum, the response provides valuable supplementary information:\n   - Alternative sourcing options (FastParts BV)\n   - Delivery timeline confirmation (12 days meets 14-day requirement)\n   - Practical alternatives (reduce order, phased procurement, renegotiate pricing)\n   - Cost center assignment and vendor reliability metrics\n\n**Minor Deviations from Expected Response:**\n\n1. **Response Length:** The actual response is substantially more detailed than the minimalist expected format. However, this represents added value rather than a failure to meet requirements.\n\n2. **Format Variance:** Expected response uses simple sections; actual response includes status badges, detailed tables, and structured workflow. Again, this adds clarity rather than introducing errors.\n\n3. **Information Density:** The expected response implies a terse acknowledgment, while the actual provides actionable intelligence. This is a design choice that enhances usability.\n\n**Critical Assessment:**\n- \u2705 Correctly prevents unauthorized spending (budget exceeded)\n- \u2705 Blocks PO creation as required\n- \u2705 Provides escalation guidance\n- \u2705 No PO artifact created inappropriately\n- \u2705 Compliance status accurately reported\n\nThe only reason this is not a perfect 1.0 is the assumption that the extensive detail, while beneficial, might slightly exceed the intended scope of a strict \"block and escalate\" scenario. However, there are no factual errors or criterion violations present."
+                    }
+                },
+                {
+                    "run": 2,
+                    "test_case_id": "tc03_budget_exceeded",
+                    "test_case_path": "/Users/raphaelcaillon/Documents/github/sam-evals-experiments/test_suites/test_cases/tc03_budget_exceeded.test.json",
+                    "duration_seconds": 33.206662,
+                    "tool_match": 0.5,
+                    "response_match": 0.090097772691327,
+                    "llm_eval": {
+                        "score": 0.9,
+                        "reasoning": "The actual response demonstrates excellent adherence to the criterion with only minor deviations from the expected response structure.\n\n**Strengths:**\n\n1. **Correctly Blocks PO Creation**: The response explicitly states \"**Status:** Not yet created pending budget clarification\" and \"No PO created\" in substance, which directly matches the expected behavior of preventing PO issuance when budget constraints exist.\n\n2. **Clear Escalation Guidance**: The response provides comprehensive escalation instructions with three specific pathways for budget resolution (revise upward, clarify as partial allocation, or reframe as unit-cost cap), going beyond the expected response's brevity while maintaining the core escalation requirement.\n\n3. **Budget Constraint Identification**: The system correctly identifies that \"Budget exceeded\" (matching the expected response criterion), with precise quantification showing the \u20ac12,000 budget represents only 22% of the lowest quote\u2014demonstrating robust financial validation logic.\n\n4. **Detailed Decision Rationale**: The response explains the gap clearly (\u20ac12,000 vs. \u20ac54,123.60\u2013\u20ac62,169.00) rather than simply stating the constraint, which enhances auditability and stakeholder understanding.\n\n5. **Maintains Critical Information**: Includes supplier recommendations (Alpha Components), delivery timeline validation (12 days meets 2-week requirement), and cost-center tracking, providing context for decision-makers.\n\n**Minor Deviations:**\n\n1. **Response Format Verbosity**: The actual response is significantly more detailed than the expected response template, which uses minimal formatting. While this adds value, it slightly departs from the expected conciseness, though this is a strength rather than weakness.\n\n2. **Supplier Information Provided Before Approval**: The response recommends Alpha Components GmbH with specific details before budget authorization. While appropriately marked as \"pending,\" best practice might reserve full supplier details for post-approval stages, though the \"pending\" qualifier mitigates this concern.\n\n**Criterion Fulfillment:**\n- \u2713 Blocks PO creation when budget unavailable\n- \u2713 Provides clear escalation guidance\n- \u2713 Identifies budget exceeded status\n- \u2713 Offers actionable next steps for authorization\n\nThe response exceeds the expected output in substance while maintaining compliance with the core criterion."
+                    }
+                }
+            ],
+            "average_duration": 43.3656755,
+            "tool_match_scores": {
+                "average": 0.75,
+                "distribution": {
+                    "min": 0.5,
+                    "q1": 0.625,
+                    "q2": 0.75,
+                    "q3": 0.875,
+                    "max": 1.0
+                }
+            },
+            "response_match_scores": {
+                "average": 0.08653544816421163,
+                "distribution": {
+                    "min": 0.08297312363709627,
+                    "q1": 0.08475428590065395,
+                    "q2": 0.08653544816421163,
+                    "q3": 0.08831661042776932,
+                    "max": 0.090097772691327
+                }
+            },
+            "llm_eval_scores": {
+                "average": 0.91,
+                "distribution": {
+                    "min": 0.9,
+                    "q1": 0.905,
+                    "q2": 0.91,
+                    "q3": 0.915,
+                    "max": 0.92
+                }
+            }
+        }
+    ]
+}

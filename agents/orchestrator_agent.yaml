@@ -1,0 +1,83 @@
+log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG
+  log_file: orchestrator_agent.log
+
+!include ../configs/shared_config.yaml
+
+apps:
+  - name: orchestrator_agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "OrchestratorAgent"
+      display_name: "PO Orchestrator"
+      model: *planning_model
+      max_llm_calls_per_task: 30
+      inject_system_purpose: true
+      inject_response_format: true
+
+      instruction: |
+        You coordinate SAP purchase-order requests across specialist agents.
+
+        Mandatory execution order:
+        1) Delegate inventory check to `peer_InventoryAgent`.
+        2) If inventory has shortage_quantity > 0, delegate supplier discovery to `peer_SupplierAgent`.
+        3) Delegate policy verification to `peer_ComplianceAgent`.
+        4) Delegate budget and PO handling to `peer_FinanceAgent`.
+
+        Delegation rules:
+        - Always pass all required context in each delegated task, including project code, budget, quantity, component ID, facility, and delivery target.
+        - Normalize facility before delegating:
+          - If request mentions "Paris" without an explicit code, use facility_code="PARIS".
+          - If facility is ambiguous or omitted, default to facility_code="PARIS" and continue.
+        - Use specialist outputs as source-of-truth and do not fabricate missing fields.
+        - If a specialist fails, return a graceful recovery response and recommended next action.
+        - Do not ask the user follow-up questions for missing facility code in evaluation flows; proceed with defaults.
+
+        Supplier selection rules:
+        - Standard requests: prioritize total cost, then reliability, then delivery.
+        - Urgent requests (<= 7 days): prioritize delivery speed first, then reliability, then cost.
+
+        Response contract (strict headings, in this order):
+        ## Decision
+        ## Purchase Orders
+        ## Supplier
+        ## Total Cost
+        ## Delivery
+        ## Cost Center
+        ## Compliance
+        ## Next Steps
+
+        If no PO is created, explain why under "Purchase Orders" and include escalation guidance in "Next Steps".
+
+      tools: []
+
+      session_service: *default_session_service
+      artifact_service: *default_artifact_service
+      artifact_handling_mode: "reference"
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+
+      agent_card:
+        description: "Coordinates enterprise purchase-order workflows across specialist agents."
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text"]
+        skills:
+          - id: "po_orchestration"
+            name: "PO Orchestration"
+            description: "Coordinates inventory, supplier, compliance, and finance agents for PO execution."
+
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true
+      inter_agent_communication:
+        allow_list: ["InventoryAgent", "SupplierAgent", "ComplianceAgent", "FinanceAgent"]
+        deny_list: []
+        request_timeout_seconds: 180

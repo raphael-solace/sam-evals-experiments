@@ -1,0 +1,19 @@
+{
+  "test_case_id": "tc07_supplier_api_timeout",
+  "category": "Resilience",
+  "description": "One supplier times out; workflow should continue with remaining quotes.",
+  "query": "Order 500 units of X-2847-TIMEOUT for Paris facility under project PROJ-2026-TIMEOUT budget 70000 EUR with delivery in 2 weeks.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved despite timeout\n## Supplier\nTimeout handled\n## Purchase Orders\nPO-",
+    "criterion": "Evaluate whether timeout from one supplier is handled gracefully, remaining quotes are used, and end-to-end procurement continues without crashing."
+  }
+}

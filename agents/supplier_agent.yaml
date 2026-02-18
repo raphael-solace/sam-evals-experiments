@@ -1,0 +1,69 @@
+log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG
+  log_file: supplier_agent.log
+
+!include ../configs/shared_config.yaml
+
+apps:
+  - name: supplier_agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "SupplierAgent"
+      display_name: "Supplier Sourcing"
+      model: *planning_model
+
+      instruction: |
+        You evaluate supplier options using parallel API calls.
+        Always call `query_supplier_apis` exactly once.
+
+        Required behavior:
+        - Ensure at least two suppliers are evaluated.
+        - If one supplier times out, continue with available quotes.
+        - Recommend supplier using:
+          * urgent (<=7 days): delivery speed first
+          * otherwise: total cost first
+
+        Return a concise summary that includes:
+        - quotes
+        - timeouts
+        - recommended_supplier_id
+        - parallel_elapsed_ms
+        - sequential_estimate_ms
+
+      tools:
+        - tool_type: python
+          component_module: "tools.sap_po_tools"
+          component_base_path: ${EXPERIMENT_ROOT}
+          function_name: "query_supplier_apis"
+          tool_name: "query_supplier_apis"
+
+      session_service: *default_session_service
+      artifact_service: *default_artifact_service
+      artifact_handling_mode: "reference"
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+
+      agent_card:
+        description: "Queries multiple suppliers in parallel and recommends a best-fit quote."
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text"]
+        skills:
+          - id: "query_supplier_apis"
+            name: "Query Supplier APIs"
+            description: "Fetches supplier pricing, delivery, and reliability in parallel."
+
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true
+      inter_agent_communication:
+        allow_list: ["OrchestratorAgent"]
+        deny_list: []
+        request_timeout_seconds: 180

@@ -1,0 +1,57 @@
+{
+    "test_case_id": "tc04_all_suppliers_out_of_stock",
+    "run_id": "run_5",
+    "query": "Need 500 units of X-2847-ALL-OOS for Paris facility, project PROJ-2026-45 budget 75000 EUR, delivery in 3 weeks.",
+    "target_agent": "OrchestratorAgent",
+    "namespace": "eval-9f783d5b-6e2f-4a7b-9df2-5316a7f82c5b",
+    "context_id": "rest-session-4230b506f8a5474e885624db4d309bd6",
+    "final_status": "completed",
+    "final_message": "Critical supplier constraint detected\u2014no suppliers can meet the 14-day deadline. Proceeding with compliance check and budget validation to prepare escalation path",
+    "start_time": "2026-02-18T18:51:30.321869",
+    "end_time": "2026-02-18T18:07:28.738542+00:00",
+    "duration_seconds": 958.416673,
+    "tool_calls": [
+        {
+            "call_id": "tooluse_Leu22qpsbwWQ5HQ9QE9vhp",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_InventoryAgent",
+            "arguments": {
+                "task_description": "Check SAP inventory for component X-2847-ALL-OOS at Paris facility (PARIS). We need 500 units for project PROJ-2026-45. Report current stock level and shortage quantity if any. Delivery target is 3 weeks from 2026-02-18, so required delivery by approximately 2026-03-04."
+            },
+            "timestamp": "2026-02-18T17:51:33.012555+00:00"
+        },
+        {
+            "call_id": "tooluse_yvFJdwkUIjkOip0kZRYqQa",
+            "agent": "",
+            "tool_name": "check_inventory_sap",
+            "arguments": {
+                "component_id": "X-2847-ALL-OOS",
+                "facility_code": "PARIS"
+            },
+            "timestamp": "2026-02-18T17:51:36.284729+00:00"
+        },
+        {
+            "call_id": "tooluse_gGdZenUymr7tB9OuLeHA9E",
+            "agent": "OrchestratorAgent",
+            "tool_name": "peer_SupplierAgent",
+            "arguments": {
+                "task_description": "URGENT procurement request - query suppliers for expedited delivery of component X-2847-ALL-OOS. Required: 500 units, delivery to Paris facility by 2026-03-04 (14 days from now). Project: PROJ-2026-45, Budget: 75000 EUR. This is an urgent request with delivery priority - expedited shipping and fast lead times are critical. Recommend best-fit supplier based on delivery speed first, then reliability, then cost."
+            },
+            "timestamp": "2026-02-18T17:51:45.915301+00:00"
+        },
+        {
+            "call_id": "tooluse_p87g57pAN4j217KPtYQ5b8",
+            "agent": "",
+            "tool_name": "query_supplier_apis",
+            "arguments": {
+                "component_id": "X-2847-ALL-OOS",
+                "quantity": 500,
+                "max_delivery_days": 14
+            },
+            "timestamp": "2026-02-18T17:51:48.334228+00:00"
+        }
+    ],
+    "input_artifacts": [],
+    "output_artifacts": [],
+    "errors": []
+}

@@ -1,0 +1,19 @@
+{
+  "test_case_id": "tc01_happy_path_supplier_sourcing",
+  "category": "Multi-Agent Workflow",
+  "description": "Component shortage triggers supplier sourcing, compliance passes, budget passes, PO is created.",
+  "query": "I need to order 500 units of component X-2847 for the Paris manufacturing facility. Project code is PROJ-2026-45 with a budget of 75000 EUR and delivery required in 3 weeks.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved\n## Purchase Orders\nPO-\n## Supplier\n## Total Cost\n## Delivery\n## Cost Center\n## Compliance\n## Next Steps",
+    "criterion": "Evaluate whether the full lifecycle succeeded: inventory shortage detected, supplier quotes retrieved, compliant supplier selected, budget validated, and a PO number issued with delivery estimate and cost center."
+  }
+}

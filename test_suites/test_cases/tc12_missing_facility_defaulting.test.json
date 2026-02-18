@@ -1,0 +1,19 @@
+{
+  "test_case_id": "tc12_missing_facility_defaulting",
+  "category": "Context Recovery",
+  "description": "Facility is omitted in the query; workflow should continue using a deterministic default without clarification loops.",
+  "query": "I need 500 units of component X-2847 for project PROJ-2026-45 with budget 75000 EUR and delivery in 3 weeks. Please proceed.",
+  "target_agent": "OrchestratorAgent",
+  "wait_time": 180,
+  "evaluation": {
+    "expected_tools": [
+      "check_inventory_sap",
+      "query_supplier_apis",
+      "validate_compliance_rules",
+      "check_budget_availability",
+      "create_purchase_order"
+    ],
+    "expected_response": "## Decision\nApproved\n## Purchase Orders\nPO-\n## Delivery\n## Next Steps",
+    "criterion": "Evaluate whether the system handles missing facility context gracefully (deterministic fallback), avoids asking clarification questions, and still completes the lifecycle."
+  }
+}
